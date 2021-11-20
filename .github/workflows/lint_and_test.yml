@@ -1,0 +1,44 @@
+name: Lint, test, build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12, 14, 15, 16, 17]
+        
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+    
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Lint
+        run: yarn lint
+        
+      - name: Run tests
+        run: yarn test
+
+      - name: Build
+        run: yarn build
+        
+
