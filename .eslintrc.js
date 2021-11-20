@@ -22,6 +22,5 @@ module.exports = {
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'never' }],
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    'no-console': 'warn',
   },
 };
