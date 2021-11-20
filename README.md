@@ -1,3 +1,6 @@
+[![Lint, test, build](https://github.com/Fuyunori/PV247-project/actions/workflows/lint_and_test.yml/badge.svg)](https://github.com/Fuyunori/PV247-project/actions/workflows/lint_and_test.yml)
+[![codecov](https://codecov.io/gh/petr7555/PV247-project/branch/main/graph/badge.svg?token=HZU73RVO6M)](https://codecov.io/gh/petr7555/PV247-project)
+
 # PV247 Project - Game of Life
 ## Used technologies
 - React
