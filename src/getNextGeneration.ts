@@ -7,10 +7,6 @@ export class CoordinateSet {
     this.data = new Set(data.map((coordinate) => coordinate.join(',')));
   }
 
-  valueOf() {
-    return this.data;
-  }
-
   has(coordinate: Coordinate): boolean {
     return this.data.has(coordinate.join(','));
   }
