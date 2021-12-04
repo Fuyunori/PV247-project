@@ -13,10 +13,12 @@ export class CoordinateSet {
 
   add(coordinate: Coordinate) {
     this.data.add(coordinate.join(','));
+    return this;
   }
 
   delete(coordinate: Coordinate) {
     this.data.delete(coordinate.join(','));
+    return this;
   }
 
   [Symbol.iterator]() {
