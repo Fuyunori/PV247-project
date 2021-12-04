@@ -1,4 +1,4 @@
-type Coordinate = readonly [number, number];
+export type Coordinate = readonly [number, number];
 
 export class CoordinateSet {
   data: Set<string>;
@@ -15,22 +15,15 @@ export class CoordinateSet {
     this.data.add(coordinate.join(','));
   }
 
-  [Symbol.iterator]() {
-    const dataIterator = this.data[Symbol.iterator]();
-    return {
-      next: () => {
-        const { done, value } = dataIterator.next();
-        if (done) {
-          return { done };
-        }
-        const [x, y] = value.split(',');
-        const coordinate = [Number(x), Number(y)];
-        return {
-          done: false,
-          value: coordinate,
-        };
-      },
-    };
+  delete(coordinate: Coordinate) {
+    this.data.delete(coordinate.join(','));
+  }
+
+  *[Symbol.iterator](): Generator<Coordinate> {
+    for (const element of this.data) {
+      const [x, y] = element.split(',').map(Number);
+      yield [x, y];
+    }
   }
 }
 
