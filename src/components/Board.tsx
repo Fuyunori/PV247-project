@@ -4,6 +4,7 @@ import './Board.css';
 import classNames from 'classnames';
 import { Slider, Stack } from '@mui/material';
 import SpeedIcon from '@mui/icons-material/Speed';
+import Grid4x4Icon from '@mui/icons-material/Grid4x4';
 
 const GLIDER: Coordinate[] = [
   [4, 4],
@@ -23,8 +24,9 @@ const getCurrentGeneration = (generations: CoordinateSet[]) => {
 };
 
 const Board = () => {
-  const [width, setWidth] = useState(10);
-  const [height, setHeight] = useState(10);
+  const [boardSize, setBoardSize] = useState(15);
+  const [simulationRunning, setSimulationRunning] = useState(false);
+
   const [simulationClearInterval, setSimulationClearInterval] = useState<ReturnType<typeof setInterval>>();
   const [simulationSpeed, setSimulationSpeed] = useState(50);
 
@@ -45,16 +47,20 @@ const Board = () => {
     setGenerations((generations) => [...generations, getNextGeneration(getCurrentGeneration(generations))]);
   };
 
-  const increaseSize = () => {
-    setWidth((width) => width + 1);
-    setHeight((height) => height + 1);
+  const handleBoardSizeChange = (_: Event, newSize: number | number[]) => {
+    if (Array.isArray(newSize)) {
+      return;
+    }
+    setBoardSize(newSize);
   };
 
   const runSimulation = () => {
+    setSimulationRunning(true);
     setSimulationClearInterval(setInterval(() => stepForward(), 500000 / (simulationSpeed * simulationSpeed)));
   };
 
   const stopSimulation = () => {
+    setSimulationRunning(false);
     if (simulationClearInterval) {
       clearInterval(simulationClearInterval);
     }
@@ -71,27 +77,32 @@ const Board = () => {
 
   return (
     <div>
-      <div className="board" style={{ gridTemplateColumns: `repeat(${width}, auto)` }}>
-        {[...Array(height)].map((_, rowIdx) =>
-          [...Array(width)].map((_, colIdx) => (
+      <div className="board" style={{ gridTemplateColumns: `repeat(${boardSize}, auto)` }}>
+        {[...Array(boardSize)].map((_, rowIdx) =>
+          [...Array(boardSize)].map((_, colIdx) => (
             <div
               className={classNames('board__cell', `board__cell--${getCellState([rowIdx, colIdx])}`)}
               key={`${rowIdx}${colIdx}`}
               onClick={() => toggleCell([rowIdx, colIdx])}
-            >
-              {`${rowIdx}${colIdx}`}
-            </div>
+            />
           )),
         )}
       </div>
       <div className="controls">
         <button onClick={stepForward}>Step forward</button>
-        <button onClick={increaseSize}>Increase size</button>
-        <button onClick={runSimulation}>Run simulation</button>
-        <button onClick={stopSimulation}>Stop simulation</button>
-        <Stack spacing={2} direction="column" sx={{ mb: 1 }} alignItems="center">
+        <button onClick={runSimulation} disabled={simulationRunning}>
+          Run simulation
+        </button>
+        <button onClick={stopSimulation} disabled={!simulationRunning}>
+          Stop simulation
+        </button>
+        <Stack direction="column" alignItems="center">
           <SpeedIcon />
           <Slider aria-label="Simulation speed" value={simulationSpeed} onChange={handleSimulationSpeedChange} />
+        </Stack>
+        <Stack direction="column" alignItems="center">
+          <Grid4x4Icon />
+          <Slider aria-label="Board size" min={10} max={20} value={boardSize} onChange={handleBoardSizeChange} />
         </Stack>
       </div>
     </div>

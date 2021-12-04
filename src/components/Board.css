@@ -1,5 +1,8 @@
 .board {
     display: grid;
+    width: 90vw;
+    height: 90vw;
+    margin: 0 auto;
 }
 
 .board__cell {
