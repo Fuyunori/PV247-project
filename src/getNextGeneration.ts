@@ -1,4 +1,4 @@
-type Coordinate = readonly [number, number];
+export type Coordinate = readonly [number, number];
 
 export class CoordinateSet {
   data: Set<string>;
@@ -13,6 +13,10 @@ export class CoordinateSet {
 
   add(coordinate: Coordinate) {
     this.data.add(coordinate.join(','));
+  }
+
+  delete(coordinate: Coordinate) {
+    this.data.delete(coordinate.join(','));
   }
 
   [Symbol.iterator]() {

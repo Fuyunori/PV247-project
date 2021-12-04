@@ -1,0 +1,15 @@
+.board {
+    display: grid;
+}
+
+.board__cell {
+    border: 1px solid black;
+}
+
+.board__cell--dead {
+    background-color: white;
+}
+
+.board__cell--alive {
+    background-color: blue;
+}
