@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 import { Game } from '../models/Game';
-import { Coordinate, CoordinateSet } from '../getNextGeneration';
+import { Coordinate, CoordinateSet } from '../utils/getNextGeneration';
 import './GameView.css';
 
 type GameEditorProps = {

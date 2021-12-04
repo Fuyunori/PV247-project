@@ -1,6 +1,6 @@
 import React, { FC, MouseEventHandler, useEffect, useRef } from 'react';
 import { Game } from '../models/Game';
-import { Coordinate } from '../getNextGeneration';
+import { Coordinate } from '../utils/getNextGeneration';
 
 const GRID_COLOR = '#999999';
 const GRID_THICKNESS = 1;

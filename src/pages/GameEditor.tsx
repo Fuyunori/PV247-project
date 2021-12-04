@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Game } from '../models/Game';
 import { Box, IconButton, Slider } from '@mui/material';
-import getNextGeneration, { Coordinate, CoordinateSet } from '../getNextGeneration';
+import getNextGeneration, { Coordinate, CoordinateSet } from '../utils/getNextGeneration';
 import { GameThumbnail } from '../components/GameThumbnail';
 import { useInterval } from '../hooks/useInterval';
 

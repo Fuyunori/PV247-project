@@ -1,4 +1,4 @@
-import { Coordinate } from '../getNextGeneration';
+import { Coordinate } from '../utils/getNextGeneration';
 
 export type Game = {
   readonly id: string;
