@@ -1,8 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Game } from '../models/Game';
-import { Box } from '@mui/material';
-import { GameView } from '../components/GameView';
+import { Box, IconButton, Slider } from '@mui/material';
 import getNextGeneration, { Coordinate, CoordinateSet } from '../getNextGeneration';
+import { GameThumbnail } from '../components/GameThumbnail';
+import { useInterval } from '../hooks/useInterval';
+
+const INIT_SIMULATION_DELAY = 100;
 
 const MOCK_GAME: Game = {
   id: '123',
@@ -23,29 +26,52 @@ const MOCK_GAME: Game = {
 };
 
 export const GameEditor: FC = () => {
-  const [game, setGame] = useState<Game>(MOCK_GAME);
+  const [history, setHistory] = useState<Game[]>([MOCK_GAME]);
 
   const updateCell = (coord: Coordinate): void => {
-    const aliveCellsSet = new CoordinateSet(game.aliveCells);
+    const [lastState, ...rest] = history;
+    const aliveCellsSet = new CoordinateSet(lastState.aliveCells);
     aliveCellsSet[aliveCellsSet.has(coord) ? 'delete' : 'add'](coord);
-    setGame({ ...game, aliveCells: [...aliveCellsSet] });
+    setHistory([{ ...lastState, aliveCells: [...aliveCellsSet] }, ...rest]);
   };
 
-  const startSimulation = (): void => {
-    setInterval(() => {
-      setGame(updateGame);
-    }, 10);
+  const stepForwards = (): void => {
+    setHistory((history) => {
+      const [lastState, ...rest] = history;
+      return [
+        {
+          ...lastState,
+          aliveCells: [...getNextGeneration(new CoordinateSet(lastState.aliveCells))],
+        },
+        lastState,
+        ...rest,
+      ];
+    });
   };
+
+  const stepBackwards = (): void => {
+    if (history.length > 1) {
+      setHistory(history.slice(1));
+    }
+  };
+
+  const resetHistory = (): void => setHistory(history.slice(-1));
+
+  const { running, start, stop, delay, setDelay } = useInterval(stepForwards, INIT_SIMULATION_DELAY);
+
+  const toggleSimulating = (): void => (running ? stop() : start());
+
+  const changeSpeed = (_: Event, value: number | number[]): void => setDelay(1000 - (value as number));
 
   return (
-    <Box>
-      <GameView game={game} onCellClick={updateCell} />
-      <button onClick={startSimulation}>Simulate</button>
+    <Box width="800px">
+      <GameThumbnail configuration={history[0]} width={800} showGrid onCellClick={updateCell} />
+
+      <IconButton onClick={resetHistory}>&laquo;</IconButton>
+      <IconButton onClick={stepBackwards}>&lsaquo;</IconButton>
+      <IconButton onClick={stepForwards}>&rsaquo;</IconButton>
+      <IconButton onClick={toggleSimulating}>{running ? 'stop' : 'start'}</IconButton>
+      <Slider min={800} max={1000} value={1000 - delay} onChange={changeSpeed} />
     </Box>
   );
 };
-
-const updateGame = (game: Game): Game => ({
-  ...game,
-  aliveCells: [...getNextGeneration(new CoordinateSet(game.aliveCells))],
-});
