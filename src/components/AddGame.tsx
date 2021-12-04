@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
+import { Card, CardActionArea, CardContent } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { FC } from 'react';
 import AddIcon from '@mui/icons-material/Add';

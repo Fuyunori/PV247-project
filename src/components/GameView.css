@@ -1,0 +1,14 @@
+.game-matrix {
+    display: grid;
+    width: 500px;
+    gap: 1px;
+    background-color: black;
+}
+
+.game-cell {
+    aspect-ratio: 1;
+}
+
+.game-cell.game-cell--dead {
+    background-color: white;
+}
