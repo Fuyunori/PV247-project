@@ -11,6 +11,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SpeedIcon from '@mui/icons-material/Speed';
 import Grid4x4Icon from '@mui/icons-material/Grid4x4';
+import Generation from '../models/Generation';
 
 const INITIAL_SIMULATION_DELAY = 100;
 
@@ -21,23 +22,21 @@ const MOCK_CONFIGURATION: Configuration = {
   width: 80,
   height: 50,
   createdAt: new Date(),
-  initialGeneration: {
-    aliveCells: [
-      [0, 0],
-      [5, 5],
-      [3, 3],
-      [9, 10],
-      [10, 10],
-      [11, 10],
-      [11, 9],
-      [10, 8],
-      [79, 6],
-    ],
-  },
+  initialGeneration: [
+    [0, 0],
+    [5, 5],
+    [3, 3],
+    [9, 10],
+    [10, 10],
+    [11, 10],
+    [11, 9],
+    [10, 8],
+    [79, 6],
+  ],
 };
 
-const getCurrentGeneration = (generations: CoordinateSet[]) => {
-  return generations[generations.length - 1];
+const getCurrentGenerationCoordinateSet = (generations: Generation[]) => {
+  return new CoordinateSet(generations[generations.length - 1]);
 };
 
 function ControlPanel(props: {
@@ -99,19 +98,22 @@ function ControlPanel(props: {
 
 const Board: FC = () => {
   usePageTitle('Play');
-  const [generations, setGenerations] = useState<CoordinateSet[]>([
-    new CoordinateSet(MOCK_CONFIGURATION.initialGeneration.aliveCells),
-  ]);
+  const [generations, setGenerations] = useState<Generation[]>([MOCK_CONFIGURATION.initialGeneration]);
 
   const toggleCell = (coordinate: Coordinate) => {
-    if (getCurrentGeneration(generations).has(coordinate)) {
-      setGenerations((generations) => [...generations.slice(-1), getCurrentGeneration(generations).delete(coordinate)]);
+    const cur = getCurrentGenerationCoordinateSet(generations);
+    if (cur.has(coordinate)) {
+      setGenerations((generations) => [...generations.slice(-1), [...cur.delete(coordinate)]]);
     } else {
-      setGenerations((generations) => [...generations.slice(-1), getCurrentGeneration(generations).add(coordinate)]);
+      setGenerations((generations) => [...generations.slice(-1), [...cur.add(coordinate)]]);
     }
   };
+
   const stepForward = () => {
-    setGenerations((generations) => [...generations, getNextGeneration(getCurrentGeneration(generations))]);
+    setGenerations((generations) => [
+      ...generations,
+      [...getNextGeneration(getCurrentGenerationCoordinateSet(generations))],
+    ]);
   };
 
   const stepBackward = (): void => {

@@ -1,7 +1,5 @@
 import { Coordinate } from '../utils/getNextGeneration';
 
-type Generation = {
-  readonly aliveCells: Coordinate[];
-};
+type Generation = Coordinate[];
 
 export default Generation;

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box } from '@mui/material';
+import { Grid } from '@mui/material';
 import usePageTitle from '../hooks/usePageTitle';
 import ConfigurationPreview from '../components/ConfigurationPreview';
 import Configuration from '../models/Configuration';
@@ -17,14 +17,12 @@ const Configurations: FC = () => {
       width: 80,
       height: 50,
       createdAt: new Date(),
-      initialGeneration: {
-        aliveCells: [
-          [0, 0],
-          [5, 5],
-          [3, 3],
-          [79, 6],
-        ],
-      },
+      initialGeneration: [
+        [0, 0],
+        [5, 5],
+        [3, 3],
+        [79, 6],
+      ],
     },
     {
       id: '456',
@@ -33,14 +31,12 @@ const Configurations: FC = () => {
       width: 80,
       height: 50,
       createdAt: new Date(),
-      initialGeneration: {
-        aliveCells: [
-          [0, 0],
-          [5, 5],
-          [3, 3],
-          [79, 6],
-        ],
-      },
+      initialGeneration: [
+        [0, 0],
+        [5, 5],
+        [3, 3],
+        [79, 6],
+      ],
     },
     {
       id: '789',
@@ -49,25 +45,23 @@ const Configurations: FC = () => {
       width: 80,
       height: 50,
       createdAt: new Date(),
-      initialGeneration: {
-        aliveCells: [
-          [0, 0],
-          [5, 5],
-          [3, 3],
-          [79, 6],
-        ],
-      },
+      initialGeneration: [
+        [0, 0],
+        [5, 5],
+        [3, 3],
+        [79, 6],
+      ],
     },
   ];
 
   return (
-    <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
+    <Grid container spacing={2}>
       {configurations?.map((configuration) => (
-        <Box key={configuration.id}>
+        <Grid key={configuration.id} item xs={4}>
           <ConfigurationPreview configuration={configuration} />
-        </Box>
+        </Grid>
       ))}
-    </Box>
+    </Grid>
   );
 };
 

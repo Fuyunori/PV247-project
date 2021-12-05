@@ -20,7 +20,7 @@ const ConfigurationPreview: FC<Props> = ({ configuration }) => {
     <Card sx={{ display: 'flex' }}>
       <CardActionArea onClick={handleClick}>
         <Canvas
-          generation={new CoordinateSet(configuration.initialGeneration.aliveCells)}
+          generation={configuration.initialGeneration}
           configWidth={configuration.width}
           configHeight={configuration.height}
           canvasWidth={200}

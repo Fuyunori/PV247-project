@@ -1,12 +1,13 @@
 import { FC, MouseEventHandler, useEffect, useRef } from 'react';
-import { Coordinate, CoordinateSet } from '../utils/getNextGeneration';
+import { Coordinate } from '../utils/getNextGeneration';
 import { useTheme } from '@mui/material';
+import Generation from '../models/Generation';
 
 const GRID_COLOR = '#999999';
 const GRID_THICKNESS = 1;
 
 export type Props = {
-  readonly generation: CoordinateSet;
+  readonly generation: Generation;
   readonly configWidth: number;
   readonly configHeight: number;
   readonly canvasWidth: number;
