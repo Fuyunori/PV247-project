@@ -11,18 +11,22 @@ const sortCoordinates = (a: Coordinate, b: Coordinate) => {
 export const indexOfCycleStart = (history: Generation[]): null | number => {
   const lastGeneration = history[history.length - 1];
 
+  console.log('START');
   const sortedLastGeneration = lastGeneration.sort(sortCoordinates);
+  console.log('last generation');
+  console.log(sortedLastGeneration);
+  console.log('history length:' + history.length);
 
   for (let i = 0; i < history.length - 1; i++) {
     const sortedGeneration = history[i].sort(sortCoordinates);
+
+    console.log('current generation:');
+    console.log(sortedGeneration);
 
     let result = true;
     for (let j = 0; j < Math.min(sortedLastGeneration.length, sortedGeneration.length); j++) {
       const [x1, y1] = sortedLastGeneration[j];
       const [x2, y2] = sortedGeneration[j];
-
-      console.log(sortedGeneration);
-      console.log(sortedLastGeneration);
 
       if (x1 !== x2 || y1 !== y2) {
         result = false;

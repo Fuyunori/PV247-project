@@ -1,5 +1,5 @@
 import { ChangeEvent, FC } from 'react';
-import { Button, ButtonGroup, Slider, Stack, TextField } from '@mui/material';
+import { Button, ButtonGroup, Slider, Stack, TextField, useMediaQuery } from '@mui/material';
 import { RiArrowGoBackFill, RiArrowGoForwardFill } from 'react-icons/ri';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -44,7 +44,7 @@ const ControlPanel: FC<Props> = ({
   const handleHeightChange = (event: ChangeEvent<HTMLTextAreaElement>) => onHeightChange(+event.target.value);
 
   return (
-    <Stack direction="row" alignItems="center" gap={2}>
+    <Stack direction={{ xs: 'column', sm: 'column', md: 'row' }} alignItems="center" gap={2}>
       <Stack direction="column" alignItems="center" width={200}>
         <TextField
           id="outlined-number"
@@ -68,7 +68,11 @@ const ControlPanel: FC<Props> = ({
         />
       </Stack>
 
-      <ButtonGroup variant="contained" aria-label="outlined primary button group">
+      <ButtonGroup
+        orientation={`${useMediaQuery('(min-width:768px)') ? `horizontal` : `vertical`}`}
+        variant="contained"
+        aria-label="outlined primary button group"
+      >
         <Button onClick={onReset} aria-label="reset">
           <RefreshIcon />
         </Button>

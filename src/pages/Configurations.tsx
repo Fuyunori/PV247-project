@@ -15,7 +15,7 @@ const Configurations: FC = () => {
   return (
     <Grid container spacing={2}>
       {configurations.map((configuration) => (
-        <Grid key={configuration.id} item xs={4}>
+        <Grid key={configuration.id} item xs={12} sm={6} md={4} lg={3}>
           <ConfigurationPreview configuration={configuration} />
         </Grid>
       ))}

@@ -14,6 +14,7 @@ import useConfigurationById from '../api/useConfigurationById';
 import { CircularProgress } from '@mui/material';
 import { Alert, Container } from '@mui/material';
 import { indexOfCycleStart } from '../utils/indexOfCycleStart';
+import { useScreenWidth } from '../utils/useScreenWidth';
 
 const INITIAL_SIMULATION_DELAY = 100;
 
@@ -23,6 +24,7 @@ const getCurrentGenerationCoordinateSet = (generations: Generation[]) => {
 
 const Board: FC = () => {
   usePageTitle('Play');
+  const width = useScreenWidth();
 
   const user = useLoggedInUser();
 
@@ -31,8 +33,6 @@ const Board: FC = () => {
   const [configuration, configurationLoading] = useConfigurationById(configId);
 
   const [generations, setGenerations] = useState<Generation[]>([configuration.initialGeneration]);
-
-  const [generationIndex, setGenerationIndex] = useState(0);
 
   useEffect(() => {
     setGenerations([configuration.initialGeneration]);
@@ -48,32 +48,23 @@ const Board: FC = () => {
   };
 
   const stepForward = () => {
-    setGenerationIndex(generationIndex + 1);
+    setGenerations((generations) => [
+      ...generations,
+      [...getNextGeneration(getCurrentGenerationCoordinateSet(generations))],
+    ]);
 
     if (!hasCycle) {
-      setGenerations((generations) => [
-        ...generations,
-        [...getNextGeneration(getCurrentGenerationCoordinateSet(generations))],
-      ]);
-
       const index = indexOfCycleStart(generations);
 
       if (index != null && !hasCycle) {
         setHasCycle(true);
-        setGenerations((oldGenerations) => oldGenerations.slice(index));
-        console.log(generations);
       }
-    } else if (generationIndex + 1 === generations.length) {
-      setGenerationIndex(0);
     }
   };
 
   const stepBackward = (): void => {
-    setGenerationIndex(generationIndex - 1);
-    if (generations.length > 1 && !hasCycle) {
+    if (generations.length > 1) {
       setGenerations((generations) => generations.slice(0, -1));
-    } else if (generationIndex === 0) {
-      setGenerationIndex(generations.length - 1);
     }
   };
 
@@ -82,18 +73,38 @@ const Board: FC = () => {
     stop();
   };
 
-  const setCurrentGenerationAsInitial = (): void => setGenerations([generations.slice(-1)[0]]);
+  const setCurrentGenerationAsInitial = (): void => {
+    setGenerations([generations.slice(-1)[0]]);
+    setHasCycle(false);
+  };
 
-  const clearBoard = (): void => setGenerations([[]]);
+  const clearBoard = (): void => {
+    setGenerations([[]]);
+    setHasCycle(false);
+  };
 
   const { running, start, stop, delay, setDelay } = useInterval(stepForward, INITIAL_SIMULATION_DELAY);
 
-  const toggleSimulation = (): void => (running ? stop() : start());
+  const toggleSimulation = (): void => {
+    if (running) {
+      stop();
+    } else {
+      start();
+    }
+
+    if (!hasCycle) {
+      const index = indexOfCycleStart(generations);
+
+      if (index != null && !hasCycle) {
+        setHasCycle(true);
+      }
+    }
+  };
 
   const changeSpeed = (_: Event, value: number | number[]): void => setDelay(1000 - (value as number));
 
-  const [boardWidth, setBoardWidth] = useState(MOCK_CONFIGURATION.width);
-  const [boardHeight, setBoardHeight] = useState(MOCK_CONFIGURATION.height);
+  const [boardWidth, setBoardWidth] = useState(configuration.width);
+  const [boardHeight, setBoardHeight] = useState(configuration.height);
   const [hasCycle, setHasCycle] = useState(false);
 
   const share = async () => {
@@ -120,10 +131,10 @@ const Board: FC = () => {
       <Social onShare={share} onSaveCurrentGeneration={saveCurrentGeneration} onSaveSimulation={saveSimulation} />
 
       <Canvas
-        generation={!hasCycle ? generations[generations.length - 1] : generations[generationIndex]}
+        generation={generations[generations.length - 1]}
         configWidth={boardWidth}
         configHeight={boardHeight}
-        canvasWidth={800}
+        canvasWidth={Math.min(800, width)}
         showGrid
         onCellClick={toggleCell}
       />
@@ -136,7 +147,7 @@ const Board: FC = () => {
             return null;
           }}
         >
-          A cycle has been detected. {generationIndex}
+          A cycle has been detected.
         </Alert>
       )}
 
