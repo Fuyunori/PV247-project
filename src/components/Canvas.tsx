@@ -1,8 +1,8 @@
 import { FC, MouseEventHandler, useEffect, useRef } from 'react';
 import { Coordinate, CoordinateSet } from '../utils/getNextGeneration';
+import { useTheme } from '@mui/material';
 
 const GRID_COLOR = '#999999';
-const CELL_COLOR = '#0bf58e';
 const GRID_THICKNESS = 1;
 
 export type Props = {
@@ -25,6 +25,9 @@ const Canvas: FC<Props> = (props) => {
     showGrid = false,
     onCellClick,
   } = props;
+
+  const theme = useTheme();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const gameRatio = configWidth / configHeight;
@@ -42,7 +45,7 @@ const Canvas: FC<Props> = (props) => {
     const ctx = canvas.getContext('2d');
     assertNonNull(ctx, 'Could not get 2D rendering context');
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    ctx.fillStyle = CELL_COLOR;
+    ctx.fillStyle = theme.palette.primary.main;
 
     if (showGrid) {
       ctx.strokeStyle = GRID_COLOR;
