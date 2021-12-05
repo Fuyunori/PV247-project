@@ -1,5 +1,5 @@
 import { AppBar, Box, Button, Container, Toolbar } from '@mui/material';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { useLoggedInUser } from '../hooks/useLoggedInUser';
 import { logOut } from '../utils/firebase';

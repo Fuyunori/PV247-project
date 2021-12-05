@@ -1,6 +1,6 @@
 import { Card, CardActionArea, CardContent } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router';
 

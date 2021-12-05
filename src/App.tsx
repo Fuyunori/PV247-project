@@ -1,6 +1,3 @@
-import React from 'react';
-
-import logo from './logo.svg';
 import { BrowserRouter } from 'react-router-dom';
 import { NavigationBar } from './components/NavigationBar';
 import { Switch } from './components/Switch';

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Box, Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import { Game } from '../models/Game';
 import { GameThumbnail } from './GameThumbnail';

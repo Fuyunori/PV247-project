@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { addDoc, collection, CollectionReference, doc, DocumentReference, getFirestore } from 'firebase/firestore';
+import { collection, CollectionReference, doc, DocumentReference, getFirestore } from 'firebase/firestore';
 import { Game } from '../models/Game';
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, User } from 'firebase/auth';
 

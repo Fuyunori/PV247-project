@@ -1,5 +1,5 @@
 import { Box, Button, Paper, Typography } from '@mui/material';
-import React, { FC, FormEvent, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import GoogleIcon from '@mui/icons-material/Google';
 import { logIn } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';

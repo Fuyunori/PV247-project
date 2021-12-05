@@ -1,9 +1,8 @@
-import React, { FC } from 'react';
-import { useGames } from '../hooks/useGames';
+import { FC } from 'react';
 import { GamePreview } from '../components/GamePreview';
 import { Game } from '../models/Game';
 import { AddGame } from '../components/AddGame';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 
 export const Home: FC = () => {
   // TODO uncomment when connected to Firestore

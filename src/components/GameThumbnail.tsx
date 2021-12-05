@@ -1,4 +1,4 @@
-import React, { FC, MouseEventHandler, useEffect, useRef } from 'react';
+import { FC, MouseEventHandler, useEffect, useRef } from 'react';
 import { Game } from '../models/Game';
 import { Coordinate } from '../utils/getNextGeneration';
 
