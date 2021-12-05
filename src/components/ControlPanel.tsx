@@ -1,51 +1,76 @@
-import { FC } from 'react';
-import { Button, ButtonGroup, Slider, Stack } from '@mui/material';
-import Grid4x4Icon from '@mui/icons-material/Grid4x4';
-import StopIcon from '@mui/icons-material/Stop';
+import { ChangeEvent, FC } from 'react';
+import { Button, ButtonGroup, Slider, Stack, TextField } from '@mui/material';
 import { RiArrowGoBackFill, RiArrowGoForwardFill } from 'react-icons/ri';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SpeedIcon from '@mui/icons-material/Speed';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import DeleteIcon from '@mui/icons-material/Delete';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 type Props = {
-  value: number;
+  boardWidth: number;
+  boardHeight: number;
   onReset: () => void;
   onSetCurrentGenerationAsInitial: () => void;
   onClear: () => void;
   onStepForward: () => void;
   onStepBackward: () => void;
   onToggleSimulation: () => void;
-  onChangeBoardSize: (_: Event, value: number | number[]) => void;
+  onWidthChange: (width: number) => void;
+  onHeightChange: (height: number) => void;
   onChangeSpeed: (_: Event, value: number | number[]) => void;
   running: boolean;
   delay: number;
 };
 
 const ControlPanel: FC<Props> = ({
-  value,
+  boardWidth,
+  boardHeight,
   onReset,
   onSetCurrentGenerationAsInitial,
   onClear,
   onStepForward,
   onStepBackward,
   onToggleSimulation,
-  onChangeBoardSize,
+  onWidthChange,
+  onHeightChange,
   onChangeSpeed,
   running,
   delay,
 }) => {
+  const handleWidthChange = (event: ChangeEvent<HTMLTextAreaElement>) => onWidthChange(+event.target.value);
+
+  const handleHeightChange = (event: ChangeEvent<HTMLTextAreaElement>) => onHeightChange(+event.target.value);
+
   return (
     <Stack direction="row" alignItems="center" gap={2}>
       <Stack direction="column" alignItems="center" width={200}>
-        <Grid4x4Icon />
-        <Slider aria-label="board size" min={10} max={100} value={value} onChange={onChangeBoardSize} />
+        <TextField
+          id="outlined-number"
+          label="width:"
+          type="number"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          onChange={handleWidthChange}
+          value={boardWidth}
+        />
+        <TextField
+          id="outlined-number"
+          label="height:"
+          type="number"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          onChange={handleHeightChange}
+          value={boardHeight}
+        />
       </Stack>
 
       <ButtonGroup variant="contained" aria-label="outlined primary button group">
         <Button onClick={onReset} aria-label="reset">
-          <StopIcon />
+          <RefreshIcon />
         </Button>
         <Button onClick={onStepBackward} aria-label="step backward">
           <RiArrowGoBackFill />
