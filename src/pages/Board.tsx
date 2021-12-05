@@ -1,36 +1,19 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import getNextGeneration, { Coordinate, CoordinateSet } from '../utils/getNextGeneration';
 import usePageTitle from '../hooks/usePageTitle';
 import Canvas from '../components/Canvas';
 import useInterval from '../hooks/useInterval';
-import Configuration from '../models/Configuration';
 import Generation from '../models/Generation';
 import getShareableLink from '../api/getShareableLink';
 import saveGeneration from '../api/saveGeneration';
 import ControlPanel from '../components/ControlPanel';
 import Social from './Social';
+import useLoggedInUser from '../hooks/useLoggedInUser';
+import { useParams } from 'react-router-dom';
+import useConfigurationById from '../api/useConfigurationById';
+import { CircularProgress } from '@mui/material';
 
 const INITIAL_SIMULATION_DELAY = 100;
-
-const MOCK_CONFIGURATION: Configuration = {
-  id: '123',
-  name: 'Mock Config',
-  authorName: 'John Smith',
-  width: 80,
-  height: 50,
-  createdAt: new Date(),
-  initialGeneration: [
-    [0, 0],
-    [5, 5],
-    [3, 3],
-    [9, 10],
-    [10, 10],
-    [11, 10],
-    [11, 9],
-    [10, 8],
-    [79, 6],
-  ],
-};
 
 const getCurrentGenerationCoordinateSet = (generations: Generation[]) => {
   return new CoordinateSet(generations.slice(-1)[0]);
@@ -40,14 +23,25 @@ const getCurrentGenerationCoordinateSet = (generations: Generation[]) => {
 
 const Board: FC = () => {
   usePageTitle('Play');
-  const [generations, setGenerations] = useState<Generation[]>([MOCK_CONFIGURATION.initialGeneration]);
+
+  const user = useLoggedInUser();
+
+  const { configId = '0' } = useParams();
+
+  const [configuration, configurationLoading] = useConfigurationById(configId);
+
+  const [generations, setGenerations] = useState<Generation[]>([configuration.initialGeneration]);
+
+  useEffect(() => {
+    setGenerations([configuration.initialGeneration]);
+  }, [configurationLoading]);
 
   const toggleCell = (coordinate: Coordinate) => {
     const cur = getCurrentGenerationCoordinateSet(generations);
     if (cur.has(coordinate)) {
-      setGenerations((generations) => [...generations.slice(-1), [...cur.delete(coordinate)]]);
+      setGenerations((generations) => [...generations.slice(0, -1), [...cur.delete(coordinate)]]);
     } else {
-      setGenerations((generations) => [...generations.slice(-1), [...cur.add(coordinate)]]);
+      setGenerations((generations) => [...generations.slice(0, -1), [...cur.add(coordinate)]]);
     }
   };
 
@@ -80,11 +74,9 @@ const Board: FC = () => {
   const [boardSize, setBoardSize] = useState(50);
   const changeBoardSize = (_: Event, value: number | number[]): void => setBoardSize(value as number);
 
-  // TODO
-  const share = () => {
-    const link = getShareableLink();
-    // copy to clipboard
-    // notify user that it is in clipboard
+  const share = async () => {
+    const link = await getShareableLink(generations[0], configuration.width, configuration.height, user);
+    await navigator.clipboard.writeText(link);
   };
 
   // TODO
@@ -97,14 +89,18 @@ const Board: FC = () => {
     saveGeneration(generations[0]);
   };
 
+  if (configurationLoading) {
+    return <CircularProgress />;
+  }
+
   return (
     <>
       <Social onShare={share} onSaveCurrentGeneration={saveCurrentGeneration} onSaveSimulation={saveSimulation} />
 
       <Canvas
         generation={generations[generations.length - 1]}
-        configWidth={MOCK_CONFIGURATION.width}
-        configHeight={MOCK_CONFIGURATION.height}
+        configWidth={configuration.width}
+        configHeight={configuration.height}
         canvasWidth={800}
         showGrid
         onCellClick={toggleCell}

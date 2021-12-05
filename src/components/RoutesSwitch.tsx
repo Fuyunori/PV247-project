@@ -7,6 +7,7 @@ import Configurations from '../pages/Configurations';
 const RoutesSwitch: FC = () => (
   <Routes>
     <Route path="/" element={<Board />} />
+    <Route path="/configurations/:configId" element={<Board />} />
     <Route path="/configurations" element={<Configurations />} />
     <Route path="/login" element={<Login />} />
   </Routes>
