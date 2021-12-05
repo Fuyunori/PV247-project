@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import Generation from '../models/Generation';
 import { gamesCollection } from '../utils/firebase';
 
-const useGames = () => {
+// TODO use react-firebase-hooks
+const useConfigurations = () => {
   const [games, setGames] = useState<Generation[]>();
 
   useEffect(() => {
@@ -19,4 +20,4 @@ const useGames = () => {
   return games;
 };
 
-export default useGames;
+export default useConfigurations;

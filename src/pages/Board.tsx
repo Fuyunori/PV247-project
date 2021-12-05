@@ -1,17 +1,16 @@
 import { FC, useState } from 'react';
-import { Button, ButtonGroup, Slider, Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import getNextGeneration, { Coordinate, CoordinateSet } from '../utils/getNextGeneration';
 import usePageTitle from '../hooks/usePageTitle';
 import Canvas from '../components/Canvas';
 import useInterval from '../hooks/useInterval';
 import Configuration from '../models/Configuration';
-import { RiArrowGoBackFill, RiArrowGoForwardFill } from 'react-icons/ri';
-import StopIcon from '@mui/icons-material/Stop';
-import PauseIcon from '@mui/icons-material/Pause';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SpeedIcon from '@mui/icons-material/Speed';
-import Grid4x4Icon from '@mui/icons-material/Grid4x4';
 import Generation from '../models/Generation';
+import ShareIcon from '@mui/icons-material/Share';
+import SaveIcon from '@mui/icons-material/Save';
+import getShareableLink from '../api/getShareableLink';
+import saveGeneration from '../api/saveGeneration';
+import ControlPanel from '../components/ControlPanel';
 
 const INITIAL_SIMULATION_DELAY = 100;
 
@@ -36,65 +35,10 @@ const MOCK_CONFIGURATION: Configuration = {
 };
 
 const getCurrentGenerationCoordinateSet = (generations: Generation[]) => {
-  return new CoordinateSet(generations[generations.length - 1]);
+  return new CoordinateSet(generations.slice(-1)[0]);
 };
 
-function ControlPanel(props: {
-  value: number;
-  onReset: () => void;
-  onStepForward: () => void;
-  onStepBackward: () => void;
-  onToggleSimulation: () => void;
-  onChangeBoardSize: (_: Event, value: number | number[]) => void;
-  onChangeSpeed: (_: Event, value: number | number[]) => void;
-  running: boolean;
-  delay: number;
-}) {
-  return (
-    <Stack direction="row" alignItems="center" gap={2}>
-      <Stack direction="column" alignItems="center" width={200}>
-        <Grid4x4Icon />
-        <Slider aria-label="board size" min={10} max={100} value={props.value} onChange={props.onChangeBoardSize} />
-      </Stack>
-
-      <ButtonGroup variant="contained" aria-label="outlined primary button group">
-        <Button onClick={props.onReset} aria-label="reset">
-          <StopIcon />
-        </Button>
-        <Button onClick={props.onStepBackward} aria-label="step backward">
-          <RiArrowGoBackFill />
-        </Button>
-        <Button onClick={props.onToggleSimulation} aria-label={props.running ? 'pause' : 'start'}>
-          {props.running ? (
-            <>
-              <PauseIcon />
-              Pause
-            </>
-          ) : (
-            <>
-              <PlayArrowIcon />
-              Start
-            </>
-          )}
-        </Button>
-        <Button onClick={props.onStepForward} aria-label="step forward">
-          <RiArrowGoForwardFill />
-        </Button>
-      </ButtonGroup>
-
-      <Stack direction="column" alignItems="center" width={200}>
-        <SpeedIcon />
-        <Slider
-          min={800}
-          max={1000}
-          value={1000 - props.delay}
-          aria-label="simulation speed"
-          onChange={props.onChangeSpeed}
-        />
-      </Stack>
-    </Stack>
-  );
-}
+// TODO cycle detection
 
 const Board: FC = () => {
   usePageTitle('Play');
@@ -124,6 +68,8 @@ const Board: FC = () => {
 
   const resetGenerations = (): void => setGenerations([generations[0]]);
 
+  const setCurrentGenerationAsInitial = (): void => setGenerations([generations.slice(-1)[0]]);
+
   const { running, start, stop, delay, setDelay } = useInterval(stepForward, INITIAL_SIMULATION_DELAY);
 
   const toggleSimulation = (): void => (running ? stop() : start());
@@ -134,8 +80,38 @@ const Board: FC = () => {
   const [boardSize, setBoardSize] = useState(50);
   const changeBoardSize = (_: Event, value: number | number[]): void => setBoardSize(value as number);
 
+  // TODO
+  const share = () => {
+    const link = getShareableLink();
+    // copy to clipboard
+    // notify user that it is in clipboard
+  };
+
+  // TODO
+  const saveCurrentGeneration = () => {
+    saveGeneration(generations.slice(-1)[0]);
+  };
+
+  // TODO
+  const saveSimulation = () => {
+    saveGeneration(generations[0]);
+  };
+
   return (
     <>
+      {/*TODO extract into Social component*/}
+      <Stack direction="row" alignItems="center" gap={2}>
+        <Button variant="contained" endIcon={<ShareIcon />} onClick={share}>
+          Share
+        </Button>
+        <Button variant="contained" endIcon={<SaveIcon />} onClick={saveCurrentGeneration}>
+          Save current generation
+        </Button>
+        <Button variant="contained" endIcon={<SaveIcon />} onClick={saveSimulation}>
+          Save simulation
+        </Button>
+      </Stack>
+
       <Canvas
         generation={generations[generations.length - 1]}
         configWidth={MOCK_CONFIGURATION.width}
@@ -153,6 +129,7 @@ const Board: FC = () => {
         onStepForward={stepForward}
         onChangeBoardSize={changeBoardSize}
         onChangeSpeed={changeSpeed}
+        onSetCurrentGenerationAsInitial={setCurrentGenerationAsInitial}
         running={running}
         delay={delay}
       />

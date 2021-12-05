@@ -4,6 +4,10 @@ import usePageTitle from '../hooks/usePageTitle';
 import ConfigurationPreview from '../components/ConfigurationPreview';
 import Configuration from '../models/Configuration';
 
+// TODO add option to select either "my configurations" or "all configurations"
+// TODO maybe some filtering (by configuration name, author name,...)
+// TODO add option to delete my configurations
+
 const Configurations: FC = () => {
   usePageTitle('Browse configurations');
   // TODO uncomment when connected to Firestore

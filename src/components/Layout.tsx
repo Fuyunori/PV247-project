@@ -7,7 +7,7 @@ const Layout: FC = ({ children }) => {
     <>
       <NavigationBar />
       <Container
-        maxWidth="sm"
+        maxWidth="lg"
         component="main"
         sx={{
           display: 'flex',

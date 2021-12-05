@@ -1,24 +1,17 @@
 import { FC } from 'react';
 import { Box, Card, CardActionArea, CardContent, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Configuration from '../models/Configuration';
 import Canvas from './Canvas';
-import { CoordinateSet } from '../utils/getNextGeneration';
 
 type Props = {
   readonly configuration: Configuration;
 };
 
 const ConfigurationPreview: FC<Props> = ({ configuration }) => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/configuration/${configuration.id}`);
-  };
-
   return (
     <Card sx={{ display: 'flex' }}>
-      <CardActionArea onClick={handleClick}>
+      <CardActionArea component={Link} to={`/configuration/${configuration.id}`}>
         <Canvas
           generation={configuration.initialGeneration}
           configWidth={configuration.width}
