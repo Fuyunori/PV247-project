@@ -1,4 +1,4 @@
-import Configuration from '../models/Configuration';
+import { Configuration } from '../models/Configuration';
 
 export const containsCycle = (history: Configuration[]): boolean => {
   const [lastState, ...rest] = history;

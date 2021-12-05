@@ -1,17 +1,17 @@
 import { FC } from 'react';
 import { Box, Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import Configuration from '../models/Configuration';
 import Canvas from './Canvas';
+import { ParsedConfiguration } from '../models/Configuration';
 
 type Props = {
-  readonly configuration: Configuration;
+  readonly configuration: ParsedConfiguration;
 };
 
 const ConfigurationPreview: FC<Props> = ({ configuration }) => {
   return (
     <Card sx={{ display: 'flex' }}>
-      <CardActionArea component={Link} to={`/configuration/${configuration.id}`}>
+      <CardActionArea component={Link} to={`/configurations/${configuration.id}`}>
         <Canvas
           generation={configuration.initialGeneration}
           configWidth={configuration.width}
