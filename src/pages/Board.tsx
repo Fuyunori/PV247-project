@@ -1,10 +1,16 @@
 import { FC, useState } from 'react';
-import { Box, IconButton, Slider } from '@mui/material';
+import { Button, ButtonGroup, Slider, Stack } from '@mui/material';
 import getNextGeneration, { Coordinate, CoordinateSet } from '../utils/getNextGeneration';
 import usePageTitle from '../hooks/usePageTitle';
 import Canvas from '../components/Canvas';
 import useInterval from '../hooks/useInterval';
 import Configuration from '../models/Configuration';
+import { RiArrowGoBackFill, RiArrowGoForwardFill } from 'react-icons/ri';
+import StopIcon from '@mui/icons-material/Stop';
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import SpeedIcon from '@mui/icons-material/Speed';
+import Grid4x4Icon from '@mui/icons-material/Grid4x4';
 
 const INITIAL_SIMULATION_DELAY = 100;
 
@@ -34,6 +40,63 @@ const getCurrentGeneration = (generations: CoordinateSet[]) => {
   return generations[generations.length - 1];
 };
 
+function ControlPanel(props: {
+  value: number;
+  onReset: () => void;
+  onStepForward: () => void;
+  onStepBackward: () => void;
+  onToggleSimulation: () => void;
+  onChangeBoardSize: (_: Event, value: number | number[]) => void;
+  onChangeSpeed: (_: Event, value: number | number[]) => void;
+  running: boolean;
+  delay: number;
+}) {
+  return (
+    <Stack direction="row" alignItems="center" gap={2}>
+      <Stack direction="column" alignItems="center" width={200}>
+        <Grid4x4Icon />
+        <Slider aria-label="board size" min={10} max={100} value={props.value} onChange={props.onChangeBoardSize} />
+      </Stack>
+
+      <ButtonGroup variant="contained" aria-label="outlined primary button group">
+        <Button onClick={props.onReset} aria-label="reset">
+          <StopIcon />
+        </Button>
+        <Button onClick={props.onStepBackward} aria-label="step backward">
+          <RiArrowGoBackFill />
+        </Button>
+        <Button onClick={props.onToggleSimulation} aria-label={props.running ? 'pause' : 'start'}>
+          {props.running ? (
+            <>
+              <PauseIcon />
+              Pause
+            </>
+          ) : (
+            <>
+              <PlayArrowIcon />
+              Start
+            </>
+          )}
+        </Button>
+        <Button onClick={props.onStepForward} aria-label="step forward">
+          <RiArrowGoForwardFill />
+        </Button>
+      </ButtonGroup>
+
+      <Stack direction="column" alignItems="center" width={200}>
+        <SpeedIcon />
+        <Slider
+          min={800}
+          max={1000}
+          value={1000 - props.delay}
+          aria-label="simulation speed"
+          onChange={props.onChangeSpeed}
+        />
+      </Stack>
+    </Stack>
+  );
+}
+
 const Board: FC = () => {
   usePageTitle('Play');
   const [generations, setGenerations] = useState<CoordinateSet[]>([
@@ -61,12 +124,16 @@ const Board: FC = () => {
 
   const { running, start, stop, delay, setDelay } = useInterval(stepForward, INITIAL_SIMULATION_DELAY);
 
-  const toggleSimulating = (): void => (running ? stop() : start());
+  const toggleSimulation = (): void => (running ? stop() : start());
 
   const changeSpeed = (_: Event, value: number | number[]): void => setDelay(1000 - (value as number));
-  //TODO different icons
+
+  // TODO
+  const [boardSize, setBoardSize] = useState(50);
+  const changeBoardSize = (_: Event, value: number | number[]): void => setBoardSize(value as number);
+
   return (
-    <Box width="800px">
+    <>
       <Canvas
         generation={generations[generations.length - 1]}
         configWidth={MOCK_CONFIGURATION.width}
@@ -76,12 +143,18 @@ const Board: FC = () => {
         onCellClick={toggleCell}
       />
 
-      <IconButton onClick={resetGenerations}>&laquo;</IconButton>
-      <IconButton onClick={stepBackward}>&lsaquo;</IconButton>
-      <IconButton onClick={stepForward}>&rsaquo;</IconButton>
-      <IconButton onClick={toggleSimulating}>{running ? 'stop' : 'start'}</IconButton>
-      <Slider min={800} max={1000} value={1000 - delay} onChange={changeSpeed} />
-    </Box>
+      <ControlPanel
+        value={boardSize}
+        onReset={resetGenerations}
+        onStepBackward={stepBackward}
+        onToggleSimulation={toggleSimulation}
+        onStepForward={stepForward}
+        onChangeBoardSize={changeBoardSize}
+        onChangeSpeed={changeSpeed}
+        running={running}
+        delay={delay}
+      />
+    </>
   );
 };
 
