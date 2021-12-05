@@ -23,5 +23,6 @@ module.exports = {
     'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'never' }],
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'no-console': 'warn',
+    'react/react-in-jsx-scope': 'off',
   },
 };

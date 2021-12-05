@@ -1,12 +1,13 @@
 import { Box, Button, Paper, Typography } from '@mui/material';
-import React, { FC, FormEvent, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import GoogleIcon from '@mui/icons-material/Google';
 import { logIn } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
+import usePageTitle from '../hooks/usePageTitle';
 
-export const Login: FC = () => {
+const Login: FC = () => {
+  usePageTitle('Login');
   const [submitError, setSubmitError] = useState<string>();
-
   const navigate = useNavigate();
 
   return (
@@ -18,7 +19,7 @@ export const Login: FC = () => {
           await logIn();
           navigate('/');
         } catch (err) {
-          setSubmitError((err as { message?: string })?.message ?? 'An unknown error has occured.');
+          setSubmitError((err as { message?: string })?.message ?? 'An unknown error has occurred.');
         }
       }}
       sx={{
@@ -52,3 +53,5 @@ export const Login: FC = () => {
     </Paper>
   );
 };
+
+export default Login;

@@ -1,5 +1,5 @@
 import { User } from 'firebase/auth';
-import React, { createContext, FC, useContext, useEffect, useState } from 'react';
+import { createContext, FC, useContext, useEffect, useState } from 'react';
 import { onAuthChanged } from '../utils/firebase';
 
 const UserContext = createContext<User | undefined>(undefined);
@@ -17,4 +17,6 @@ export const UserProvider: FC = ({ children }) => {
 };
 
 // Hook providing logged in user information
-export const useLoggedInUser = () => useContext(UserContext);
+const useLoggedInUser = () => useContext(UserContext);
+
+export default useLoggedInUser;

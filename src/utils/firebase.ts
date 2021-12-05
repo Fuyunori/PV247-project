@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { addDoc, collection, CollectionReference, doc, DocumentReference, getFirestore } from 'firebase/firestore';
-import { Game } from '../models/Game';
+import { collection, CollectionReference, doc, DocumentReference, getFirestore } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, User } from 'firebase/auth';
+import Generation from '../models/Generation';
 
 // Initialize Firebase
 initializeApp({
@@ -30,7 +30,7 @@ export const onAuthChanged = (callback: (u: User | null) => void) => onAuthState
 const db = getFirestore();
 
 // Collections
-export const userCollection = collection(db, 'users') as CollectionReference<Game>;
-export const gamesCollection = collection(db, 'users') as CollectionReference<Game>;
+export const userCollection = collection(db, 'users') as CollectionReference<Generation>;
+export const gamesCollection = collection(db, 'users') as CollectionReference<Generation>;
 
-export const gameDocument = (id: string) => doc(db, 'configuration', id) as DocumentReference<Game>;
+export const gameDocument = (id: string) => doc(db, 'configuration', id) as DocumentReference<Generation>;

@@ -1,33 +1,21 @@
-import React from 'react';
-
-import logo from './logo.svg';
 import { BrowserRouter } from 'react-router-dom';
-import { NavigationBar } from './components/NavigationBar';
-import { Switch } from './components/Switch';
-import { Container } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { UserProvider } from './hooks/useLoggedInUser';
+import theme from './utils/theme';
+import RoutesSwitch from './components/RoutesSwitch';
+import Layout from './components/Layout';
 
 const App = () => {
   return (
     <UserProvider>
-      <BrowserRouter>
-        <NavigationBar />
-        <Container
-          maxWidth="sm"
-          component="main"
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh',
-            pt: 8,
-            gap: 2,
-          }}
-        >
-          <Switch />
-        </Container>
-      </BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <CssBaseline />
+          <Layout>
+            <RoutesSwitch />
+          </Layout>
+        </BrowserRouter>
+      </ThemeProvider>
     </UserProvider>
   );
 };

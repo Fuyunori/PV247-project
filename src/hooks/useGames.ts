@@ -1,10 +1,10 @@
 import { onSnapshot } from '@firebase/firestore';
 import { useEffect, useState } from 'react';
-import { Game } from '../models/Game';
+import Generation from '../models/Generation';
 import { gamesCollection } from '../utils/firebase';
 
-export const useGames = () => {
-  const [games, setGames] = useState<Game[]>();
+const useGames = () => {
+  const [games, setGames] = useState<Generation[]>();
 
   useEffect(() => {
     const unsubscribe = onSnapshot(gamesCollection, (snapshot) => {
@@ -18,3 +18,5 @@ export const useGames = () => {
 
   return games;
 };
+
+export default useGames;
