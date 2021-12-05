@@ -77,8 +77,6 @@ const Board: FC = () => {
   const share = async () => {
     const link = await getShareableLink(generations[0], configuration.width, configuration.height, user);
     await navigator.clipboard.writeText(link);
-    // TODO notify user that link is in clipboard
-    console.log(`Copied ${link} to clipboard.`);
   };
 
   // TODO
