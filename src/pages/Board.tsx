@@ -70,6 +70,8 @@ const Board: FC = () => {
 
   const setCurrentGenerationAsInitial = (): void => setGenerations([generations.slice(-1)[0]]);
 
+  const clearBoard = (): void => setGenerations([[]]);
+
   const { running, start, stop, delay, setDelay } = useInterval(stepForward, INITIAL_SIMULATION_DELAY);
 
   const toggleSimulation = (): void => (running ? stop() : start());
@@ -124,12 +126,13 @@ const Board: FC = () => {
       <ControlPanel
         value={boardSize}
         onReset={resetGenerations}
+        onSetCurrentGenerationAsInitial={setCurrentGenerationAsInitial}
+        onClear={clearBoard}
         onStepBackward={stepBackward}
         onToggleSimulation={toggleSimulation}
         onStepForward={stepForward}
         onChangeBoardSize={changeBoardSize}
         onChangeSpeed={changeSpeed}
-        onSetCurrentGenerationAsInitial={setCurrentGenerationAsInitial}
         running={running}
         delay={delay}
       />

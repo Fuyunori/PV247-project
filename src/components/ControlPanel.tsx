@@ -7,11 +7,13 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SpeedIcon from '@mui/icons-material/Speed';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 type Props = {
   value: number;
   onReset: () => void;
   onSetCurrentGenerationAsInitial: () => void;
+  onClear: () => void;
   onStepForward: () => void;
   onStepBackward: () => void;
   onToggleSimulation: () => void;
@@ -25,6 +27,7 @@ const ControlPanel: FC<Props> = ({
   value,
   onReset,
   onSetCurrentGenerationAsInitial,
+  onClear,
   onStepForward,
   onStepBackward,
   onToggleSimulation,
@@ -63,6 +66,9 @@ const ControlPanel: FC<Props> = ({
           startIcon={<ArrowUpwardIcon />}
         >
           Make initial
+        </Button>
+        <Button onClick={onClear} aria-label="clear board" startIcon={<DeleteIcon />}>
+          Clear
         </Button>
       </ButtonGroup>
 
