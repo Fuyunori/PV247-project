@@ -1,9 +1,11 @@
-import { Game } from '../models/Game';
+import Configuration from '../models/Configuration';
 
-export const containsCycle = (history: Game[]): boolean => {
+export const containsCycle = (history: Configuration[]): boolean => {
   const [lastState, ...rest] = history;
 
-  for (const game of rest) {
-    if (game.aliveCells.every(coord => l))
-  }
+  // TODO:
+  // for (const game of rest) {
+  //   if (game.aliveCells.every(coord => l))
+  // }
+  return true;
 };
