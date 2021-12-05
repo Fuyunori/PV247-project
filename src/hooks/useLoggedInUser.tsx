@@ -17,4 +17,6 @@ export const UserProvider: FC = ({ children }) => {
 };
 
 // Hook providing logged in user information
-export const useLoggedInUser = () => useContext(UserContext);
+const useLoggedInUser = () => useContext(UserContext);
+
+export default useLoggedInUser;

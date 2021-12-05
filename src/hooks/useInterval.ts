@@ -1,8 +1,6 @@
 import { useState } from 'react';
 
-declare function setInterval(callback: () => void, delay: number): number;
-
-export const useInterval = (
+const useInterval = (
   callback: () => void,
   initDelay: number,
 ): {
@@ -13,29 +11,31 @@ export const useInterval = (
   setDelay: (delay: number) => void;
 } => {
   const [delay, setDelay] = useState(initDelay);
-  const [intervalId, setIntervalId] = useState<number | null>(null);
+  const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
 
   return {
     delay,
     running: intervalId != null,
     start: () => {
-      if (intervalId != null) {
+      if (intervalId) {
         clearInterval(intervalId);
       }
       setIntervalId(setInterval(callback, delay));
     },
     stop: () => {
-      if (intervalId != null) {
+      if (intervalId) {
         clearInterval(intervalId);
         setIntervalId(null);
       }
     },
     setDelay: (delay) => {
       setDelay(delay);
-      if (intervalId != null) {
+      if (intervalId) {
         clearInterval(intervalId);
         setIntervalId(setInterval(callback, delay));
       }
     },
   };
 };
+
+export default useInterval;
