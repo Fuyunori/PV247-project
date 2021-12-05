@@ -1,16 +1,14 @@
 import { FC, useState } from 'react';
-import { Button, Stack } from '@mui/material';
 import getNextGeneration, { Coordinate, CoordinateSet } from '../utils/getNextGeneration';
 import usePageTitle from '../hooks/usePageTitle';
 import Canvas from '../components/Canvas';
 import useInterval from '../hooks/useInterval';
 import Configuration from '../models/Configuration';
 import Generation from '../models/Generation';
-import ShareIcon from '@mui/icons-material/Share';
-import SaveIcon from '@mui/icons-material/Save';
 import getShareableLink from '../api/getShareableLink';
 import saveGeneration from '../api/saveGeneration';
 import ControlPanel from '../components/ControlPanel';
+import Social from './Social';
 
 const INITIAL_SIMULATION_DELAY = 100;
 
@@ -101,18 +99,7 @@ const Board: FC = () => {
 
   return (
     <>
-      {/*TODO extract into Social component*/}
-      <Stack direction="row" alignItems="center" gap={2}>
-        <Button variant="contained" endIcon={<ShareIcon />} onClick={share}>
-          Share
-        </Button>
-        <Button variant="contained" endIcon={<SaveIcon />} onClick={saveCurrentGeneration}>
-          Save current generation
-        </Button>
-        <Button variant="contained" endIcon={<SaveIcon />} onClick={saveSimulation}>
-          Save simulation
-        </Button>
-      </Stack>
+      <Social onShare={share} onSaveCurrentGeneration={saveCurrentGeneration} onSaveSimulation={saveSimulation} />
 
       <Canvas
         generation={generations[generations.length - 1]}
