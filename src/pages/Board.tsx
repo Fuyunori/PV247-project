@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import getNextGeneration, { Coordinate, CoordinateSet } from '../utils/getNextGeneration';
 import usePageTitle from '../hooks/usePageTitle';
 import Canvas from '../components/Canvas';
@@ -7,12 +7,11 @@ import Generation from '../models/Generation';
 import getShareableLink from '../api/getShareableLink';
 import saveGeneration from '../api/saveGeneration';
 import ControlPanel from '../components/ControlPanel';
-import Social from './Social';
+import Social from '../components/Social';
 import useLoggedInUser from '../hooks/useLoggedInUser';
 import { useParams } from 'react-router-dom';
 import useConfigurationById from '../api/useConfigurationById';
-import { CircularProgress } from '@mui/material';
-import { Container } from '@mui/material';
+import { CircularProgress, Container } from '@mui/material';
 import { indexOfCycleStart } from '../utils/indexOfCycleStart';
 import { useScreenWidth } from '../utils/useScreenWidth';
 import { CycleAlert } from '../components/CycleAlert';
@@ -25,7 +24,7 @@ const getCurrentGenerationCoordinateSet = (generations: Generation[]) => {
 
 const Board: FC = () => {
   usePageTitle('Play');
-  const width = useScreenWidth();
+  const screenWidth = useScreenWidth();
 
   const user = useLoggedInUser();
 
@@ -37,6 +36,8 @@ const Board: FC = () => {
 
   useEffect(() => {
     setGenerations([configuration.initialGeneration]);
+    setBoardWidth(configuration.width);
+    setBoardHeight(configuration.height);
   }, [configurationLoading]);
 
   const toggleCell = (coordinate: Coordinate) => {
@@ -109,18 +110,18 @@ const Board: FC = () => {
   const [hasCycle, setHasCycle] = useState(false);
 
   const share = async () => {
-    const link = await getShareableLink(generations[0], configuration.width, configuration.height, user);
+    const link = await getShareableLink(generations[0], boardWidth, boardHeight, user);
     await navigator.clipboard.writeText(link);
   };
 
   // TODO
-  const saveCurrentGeneration = () => {
-    saveGeneration(generations.slice(-1)[0]);
+  const saveCurrentGeneration = async (configName: string) => {
+    saveGeneration(generations.slice(-1)[0], configName);
   };
 
   // TODO
-  const saveSimulation = () => {
-    saveGeneration(generations[0]);
+  const saveSimulation = async (configName: string) => {
+    saveGeneration(generations[0], configName);
   };
 
   if (configurationLoading) {
@@ -132,18 +133,17 @@ const Board: FC = () => {
       </Container>
     );
   }
-
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       <Social onShare={share} onSaveCurrentGeneration={saveCurrentGeneration} onSaveSimulation={saveSimulation} />
 
-      {hasCycle && <CycleAlert isOpen={hasCycle}>A cycle has been detected</CycleAlert>}
+      {hasCycle && <CycleAlert hasCycle={hasCycle} />}
 
       <Canvas
         generation={generations[generations.length - 1]}
         configWidth={boardWidth}
         configHeight={boardHeight}
-        canvasWidth={Math.min(800, width)}
+        canvasWidth={Math.min(800, screenWidth)}
         showGrid
         onCellClick={toggleCell}
       />

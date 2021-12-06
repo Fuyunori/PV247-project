@@ -1,36 +1,28 @@
 import React, { FC, useState } from 'react';
-import { Alert, Collapse, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { Alert, Snackbar } from '@mui/material';
 
 type CycleAlertProps = {
-  readonly isOpen: boolean;
+  readonly hasCycle: boolean;
 };
 
-export const CycleAlert: FC<CycleAlertProps> = ({ isOpen, children }) => {
-  const [open, setOpen] = useState(isOpen);
+export const CycleAlert: FC<CycleAlertProps> = ({ hasCycle }) => {
+  const [open, setOpen] = useState(hasCycle);
+
+  const closeSnackbar = () => {
+    setOpen(false);
+  };
 
   return (
-    <Collapse in={open}>
-      <Alert
-        action={
-          <IconButton
-            aria-label="close"
-            color="inherit"
-            size="small"
-            onClick={() => {
-              setOpen(false);
-            }}
-          >
-            <CloseIcon fontSize="inherit" />
-          </IconButton>
-        }
-        variant="filled"
-        severity="info"
-        sx={{ margin: '20px' }}
-        onClose={() => setOpen(false)}
-      >
-        {children}
+    <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      sx={{ marginTop: 7 }}
+      autoHideDuration={3000}
+      open={open}
+      onClose={closeSnackbar}
+    >
+      <Alert severity="info" sx={{ backgroundColor: 'grey.800' }}>
+        A cycle has been detected.
       </Alert>
-    </Collapse>
+    </Snackbar>
   );
 };
