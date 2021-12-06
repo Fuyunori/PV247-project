@@ -44,7 +44,7 @@ const ControlPanel: FC<Props> = ({
   const handleHeightChange = (event: ChangeEvent<HTMLTextAreaElement>) => onHeightChange(+event.target.value);
 
   return (
-    <Stack direction={{ xs: 'column', sm: 'column', md: 'row' }} alignItems="center" gap={2}>
+    <Stack direction={{ xs: 'column', sm: 'column', md: 'row' }} alignItems="center" gap={2} sx={{ margin: '30px' }}>
       <Stack direction="column" alignItems="center" width={200}>
         <TextField
           id="outlined-number"

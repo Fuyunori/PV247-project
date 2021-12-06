@@ -12,9 +12,10 @@ import useLoggedInUser from '../hooks/useLoggedInUser';
 import { useParams } from 'react-router-dom';
 import useConfigurationById from '../api/useConfigurationById';
 import { CircularProgress } from '@mui/material';
-import { Alert, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import { indexOfCycleStart } from '../utils/indexOfCycleStart';
 import { useScreenWidth } from '../utils/useScreenWidth';
+import { CycleAlert } from '../components/CycleAlert';
 
 const INITIAL_SIMULATION_DELAY = 100;
 
@@ -123,12 +124,20 @@ const Board: FC = () => {
   };
 
   if (configurationLoading) {
-    return <CircularProgress />;
+    return (
+      <Container
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}
+      >
+        <CircularProgress />
+      </Container>
+    );
   }
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       <Social onShare={share} onSaveCurrentGeneration={saveCurrentGeneration} onSaveSimulation={saveSimulation} />
+
+      {hasCycle && <CycleAlert isOpen={hasCycle}>A cycle has been detected</CycleAlert>}
 
       <Canvas
         generation={generations[generations.length - 1]}
@@ -138,18 +147,6 @@ const Board: FC = () => {
         showGrid
         onCellClick={toggleCell}
       />
-
-      {hasCycle && (
-        <Alert
-          severity="info"
-          sx={{ margin: '20px' }}
-          onClose={() => {
-            return null;
-          }}
-        >
-          A cycle has been detected.
-        </Alert>
-      )}
 
       <ControlPanel
         boardWidth={boardWidth}
