@@ -35,7 +35,7 @@ const Social: FC<Props> = ({ onShare, onSaveCurrentGeneration, onSaveSimulation 
           Link has been copied to clipboard.
         </Alert>
       </Snackbar>
-      <Stack direction="row" alignItems="center" gap={2}>
+      <Stack direction={{ xs: 'column', sm: 'column', md: 'row' }} alignItems="center" gap={2} sx={{ margin: '30px' }}>
         <Button
           variant="contained"
           endIcon={generatingShareLink ? <CircularProgress sx={{ color: 'grey.500' }} size={17} /> : <ShareIcon />}

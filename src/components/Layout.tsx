@@ -10,11 +10,9 @@ const Layout: FC = ({ children }) => {
         maxWidth="lg"
         component="main"
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
           alignItems: 'center',
           height: '100vh',
+          paddingTop: '100px',
           pt: 8,
           gap: 2,
         }}
