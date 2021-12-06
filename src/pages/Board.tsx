@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import getNextGeneration, { Coordinate, CoordinateSet } from '../utils/getNextGeneration';
 import usePageTitle from '../hooks/usePageTitle';
 import Canvas from '../components/Canvas';
@@ -11,8 +11,7 @@ import Social from '../components/Social';
 import useLoggedInUser from '../hooks/useLoggedInUser';
 import { useParams } from 'react-router-dom';
 import useConfigurationById from '../api/useConfigurationById';
-import { CircularProgress } from '@mui/material';
-import { Container } from '@mui/material';
+import { CircularProgress, Container } from '@mui/material';
 import { indexOfCycleStart } from '../utils/indexOfCycleStart';
 import { useScreenWidth } from '../utils/useScreenWidth';
 import { CycleAlert } from '../components/CycleAlert';
@@ -132,12 +131,11 @@ const Board: FC = () => {
       </Container>
     );
   }
-
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       <Social onShare={share} onSaveCurrentGeneration={saveCurrentGeneration} onSaveSimulation={saveSimulation} />
 
-      {hasCycle && <CycleAlert isOpen={hasCycle}>A cycle has been detected</CycleAlert>}
+      {hasCycle && <CycleAlert hasCycle={hasCycle} />}
 
       <Canvas
         generation={generations[generations.length - 1]}

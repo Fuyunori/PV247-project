@@ -56,7 +56,7 @@ const Social: FC<Props> = ({ onShare, onSaveCurrentGeneration, onSaveSimulation 
   return (
     <>
       <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         sx={{ marginTop: 7 }}
         autoHideDuration={3000}
         open={snackbarOpen}
