@@ -12,6 +12,10 @@ import useLoggedInUser from '../hooks/useLoggedInUser';
 import { useParams } from 'react-router-dom';
 import useConfigurationById from '../api/useConfigurationById';
 import { CircularProgress } from '@mui/material';
+import { Container } from '@mui/material';
+import { indexOfCycleStart } from '../utils/indexOfCycleStart';
+import { useScreenWidth } from '../utils/useScreenWidth';
+import { CycleAlert } from '../components/CycleAlert';
 
 const INITIAL_SIMULATION_DELAY = 100;
 
@@ -19,10 +23,9 @@ const getCurrentGenerationCoordinateSet = (generations: Generation[]) => {
   return new CoordinateSet(generations.slice(-1)[0]);
 };
 
-// TODO cycle detection
-
 const Board: FC = () => {
   usePageTitle('Play');
+  const width = useScreenWidth();
 
   const user = useLoggedInUser();
 
@@ -50,6 +53,14 @@ const Board: FC = () => {
       ...generations,
       [...getNextGeneration(getCurrentGenerationCoordinateSet(generations))],
     ]);
+
+    if (!hasCycle) {
+      const index = indexOfCycleStart(generations);
+
+      if (index != null && !hasCycle) {
+        setHasCycle(true);
+      }
+    }
   };
 
   const stepBackward = (): void => {
@@ -58,21 +69,44 @@ const Board: FC = () => {
     }
   };
 
-  const resetGenerations = (): void => setGenerations([generations[0]]);
+  const resetGenerations = (): void => {
+    setGenerations([generations[0]]);
+    stop();
+  };
 
-  const setCurrentGenerationAsInitial = (): void => setGenerations([generations.slice(-1)[0]]);
+  const setCurrentGenerationAsInitial = (): void => {
+    setGenerations([generations.slice(-1)[0]]);
+    setHasCycle(false);
+  };
 
-  const clearBoard = (): void => setGenerations([[]]);
+  const clearBoard = (): void => {
+    setGenerations([[]]);
+    setHasCycle(false);
+  };
 
   const { running, start, stop, delay, setDelay } = useInterval(stepForward, INITIAL_SIMULATION_DELAY);
 
-  const toggleSimulation = (): void => (running ? stop() : start());
+  const toggleSimulation = (): void => {
+    if (running) {
+      stop();
+    } else {
+      start();
+    }
+
+    if (!hasCycle) {
+      const index = indexOfCycleStart(generations);
+
+      if (index != null && !hasCycle) {
+        setHasCycle(true);
+      }
+    }
+  };
 
   const changeSpeed = (_: Event, value: number | number[]): void => setDelay(1000 - (value as number));
 
-  // TODO
-  const [boardSize, setBoardSize] = useState(50);
-  const changeBoardSize = (_: Event, value: number | number[]): void => setBoardSize(value as number);
+  const [boardWidth, setBoardWidth] = useState(configuration.width);
+  const [boardHeight, setBoardHeight] = useState(configuration.height);
+  const [hasCycle, setHasCycle] = useState(false);
 
   const share = async () => {
     const link = await getShareableLink(generations[0], configuration.width, configuration.height, user);
@@ -90,36 +124,46 @@ const Board: FC = () => {
   };
 
   if (configurationLoading) {
-    return <CircularProgress />;
+    return (
+      <Container
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}
+      >
+        <CircularProgress />
+      </Container>
+    );
   }
 
   return (
-    <>
+    <Container sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       <Social onShare={share} onSaveCurrentGeneration={saveCurrentGeneration} onSaveSimulation={saveSimulation} />
+
+      {hasCycle && <CycleAlert isOpen={hasCycle}>A cycle has been detected</CycleAlert>}
 
       <Canvas
         generation={generations[generations.length - 1]}
-        configWidth={configuration.width}
-        configHeight={configuration.height}
-        canvasWidth={800}
+        configWidth={boardWidth}
+        configHeight={boardHeight}
+        canvasWidth={Math.min(800, width)}
         showGrid
         onCellClick={toggleCell}
       />
 
       <ControlPanel
-        value={boardSize}
+        boardWidth={boardWidth}
+        boardHeight={boardHeight}
         onReset={resetGenerations}
         onSetCurrentGenerationAsInitial={setCurrentGenerationAsInitial}
         onClear={clearBoard}
         onStepBackward={stepBackward}
         onToggleSimulation={toggleSimulation}
         onStepForward={stepForward}
-        onChangeBoardSize={changeBoardSize}
+        onHeightChange={setBoardHeight}
+        onWidthChange={setBoardWidth}
         onChangeSpeed={changeSpeed}
         running={running}
         delay={delay}
       />
-    </>
+    </Container>
   );
 };
 

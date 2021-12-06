@@ -24,23 +24,17 @@ const Login: FC = () => {
       }}
       sx={{
         display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         flexDirection: 'column',
         p: 4,
         gap: 2,
       }}
     >
-      <Typography variant="h4" component="h2" textAlign="center">
+      <Typography variant="h4" component="h1" textAlign="center">
         Log in
       </Typography>
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 2,
-          alignItems: 'center',
-          alignSelf: 'flex-end',
-          mt: 2,
-        }}
-      >
+      <Box>
         {submitError && (
           <Typography variant="caption" textAlign="right" sx={{ color: 'error.main' }}>
             {submitError}
