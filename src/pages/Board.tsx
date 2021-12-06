@@ -7,7 +7,7 @@ import Generation from '../models/Generation';
 import getShareableLink from '../api/getShareableLink';
 import saveGeneration from '../api/saveGeneration';
 import ControlPanel from '../components/ControlPanel';
-import Social from './Social';
+import Social from '../components/Social';
 import useLoggedInUser from '../hooks/useLoggedInUser';
 import { useParams } from 'react-router-dom';
 import useConfigurationById from '../api/useConfigurationById';
@@ -80,13 +80,13 @@ const Board: FC = () => {
   };
 
   // TODO
-  const saveCurrentGeneration = () => {
-    saveGeneration(generations.slice(-1)[0]);
+  const saveCurrentGeneration = async (configName: string) => {
+    saveGeneration(generations.slice(-1)[0], configName);
   };
 
   // TODO
-  const saveSimulation = () => {
-    saveGeneration(generations[0]);
+  const saveSimulation = async (configName: string) => {
+    saveGeneration(generations[0], configName);
   };
 
   if (configurationLoading) {
