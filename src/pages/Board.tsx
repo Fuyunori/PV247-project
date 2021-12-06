@@ -24,7 +24,7 @@ const getCurrentGenerationCoordinateSet = (generations: Generation[]) => {
 
 const Board: FC = () => {
   usePageTitle('Play');
-  const width = useScreenWidth();
+  const screenWidth = useScreenWidth();
 
   const user = useLoggedInUser();
 
@@ -36,6 +36,8 @@ const Board: FC = () => {
 
   useEffect(() => {
     setGenerations([configuration.initialGeneration]);
+    setBoardWidth(configuration.width);
+    setBoardHeight(configuration.height);
   }, [configurationLoading]);
 
   const toggleCell = (coordinate: Coordinate) => {
@@ -108,7 +110,7 @@ const Board: FC = () => {
   const [hasCycle, setHasCycle] = useState(false);
 
   const share = async () => {
-    const link = await getShareableLink(generations[0], configuration.width, configuration.height, user);
+    const link = await getShareableLink(generations[0], boardWidth, boardHeight, user);
     await navigator.clipboard.writeText(link);
   };
 
@@ -141,7 +143,7 @@ const Board: FC = () => {
         generation={generations[generations.length - 1]}
         configWidth={boardWidth}
         configHeight={boardHeight}
-        canvasWidth={Math.min(800, width)}
+        canvasWidth={Math.min(800, screenWidth)}
         showGrid
         onCellClick={toggleCell}
       />

@@ -45,27 +45,9 @@ const ControlPanel: FC<Props> = ({
 
   return (
     <Stack direction={{ xs: 'column', sm: 'column', md: 'row' }} alignItems="center" gap={2} sx={{ margin: '30px' }}>
-      <Stack direction="column" alignItems="center" width={200}>
-        <TextField
-          id="outlined-number"
-          label="width:"
-          type="number"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={handleWidthChange}
-          value={boardWidth}
-        />
-        <TextField
-          id="outlined-number"
-          label="height:"
-          type="number"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={handleHeightChange}
-          value={boardHeight}
-        />
+      <Stack direction="column" alignItems="center" width={200} gap={1.5}>
+        <TextField label="width:" type="number" onChange={handleWidthChange} value={boardWidth} />
+        <TextField label="height:" type="number" onChange={handleHeightChange} value={boardHeight} />
       </Stack>
 
       <ButtonGroup
