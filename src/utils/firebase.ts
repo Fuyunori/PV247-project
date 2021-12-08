@@ -5,12 +5,12 @@ import { StoredConfiguration } from '../models/Configuration';
 
 // Initialize Firebase
 initializeApp({
-  apiKey: "AIzaSyCN2yuROuU9dXMnd2-ffACWtioVRqmgmlw",
-  authDomain: "pv247-game-of-life.firebaseapp.com",
-  projectId: "pv247-game-of-life",
-  storageBucket: "pv247-game-of-life.appspot.com",
-  messagingSenderId: "696496172470",
-  appId: "1:696496172470:web:02d72aa4ed479047d9e517",
+  apiKey: 'AIzaSyCN2yuROuU9dXMnd2-ffACWtioVRqmgmlw',
+  authDomain: 'pv247-game-of-life.firebaseapp.com',
+  projectId: 'pv247-game-of-life',
+  storageBucket: 'pv247-game-of-life.appspot.com',
+  messagingSenderId: '696496172470',
+  appId: '1:696496172470:web:02d72aa4ed479047d9e517',
 });
 
 // Authentication
