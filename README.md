@@ -1,5 +1,6 @@
-[![Lint, test, build](https://github.com/Fuyunori/PV247-project/actions/workflows/lint_and_test.yml/badge.svg)](https://github.com/Fuyunori/PV247-project/actions/workflows/lint_and_test.yml)
-[![codecov](https://codecov.io/gh/petr7555/PV247-project/branch/main/graph/badge.svg?token=HZU73RVO6M)](https://codecov.io/gh/petr7555/PV247-project)
+[![Firebase Deployment](https://github.com/petr7555/pv247-game-of-life/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/petr7555/pv247-game-of-life/actions/workflows/firebase-hosting-merge.yml)
+[![Lint, test, build](https://github.com/petr7555/pv247-game-of-life/actions/workflows/lint_and_test.yml/badge.svg)](https://github.com/petr7555/pv247-game-of-life/actions/workflows/lint_and_test.yml)
+[![codecov](https://codecov.io/gh/petr7555/pv247-game-of-life/branch/main/graph/badge.svg?token=CA27W2XYL6)](https://codecov.io/gh/petr7555/pv247-game-of-life)
 
 # PV247 Project - Game of Life
 ## Used technologies
