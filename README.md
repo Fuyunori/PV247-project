@@ -7,7 +7,7 @@ Running on https://pv247-game-of-life.web.app/.
 
 ## Used technologies
 - React
-- Firebase _(Firestore, Firebase Auth)_
+- Firebase (Firestore, Firebase Auth)
 - Material UI
 
 ## Functional requirements
