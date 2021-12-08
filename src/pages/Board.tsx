@@ -14,6 +14,7 @@ import useConfigurationById from '../api/useConfigurationById';
 import { Alert, CircularProgress, Container, Snackbar } from '@mui/material';
 import { useScreenWidth } from '../utils/useScreenWidth';
 import generationsAreEqual from '../utils/generationsAreEqual';
+import CycleAlert from '../components/CycleAlert';
 
 const INITIAL_SIMULATION_TIMEOUT = 100;
 
@@ -127,21 +128,12 @@ const Board: FC = () => {
       </Container>
     );
   }
+
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       <Social onShare={share} onSaveCurrentGeneration={saveCurrentGeneration} onSaveSimulation={saveSimulation} />
 
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        sx={{ marginTop: 7 }}
-        autoHideDuration={3000}
-        open={detectedCycle}
-        onClose={closeCycleSnackbar}
-      >
-        <Alert severity="info" sx={{ backgroundColor: 'grey.800' }}>
-          A cycle has been detected.
-        </Alert>
-      </Snackbar>
+      <CycleAlert detectedCycle={detectedCycle} closeCycleSnackbar={closeCycleSnackbar} />
 
       <Canvas
         generation={generations[generations.length - 1]}

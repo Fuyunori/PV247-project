@@ -1,24 +1,19 @@
 import React, { FC, useState } from 'react';
-import { Alert, Snackbar } from '@mui/material';
+import { Alert, Container, Snackbar } from '@mui/material';
 
-type CycleAlertProps = {
-  readonly hasCycle: boolean;
+type Props = {
+  detectedCycle: boolean;
+  closeCycleSnackbar: () => void;
 };
 
-export const CycleAlert: FC<CycleAlertProps> = ({ hasCycle }) => {
-  const [open, setOpen] = useState(hasCycle);
-
-  const closeSnackbar = () => {
-    setOpen(false);
-  };
-
+const CycleAlert: FC<Props> = ({ detectedCycle, closeCycleSnackbar }) => {
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       sx={{ marginTop: 7 }}
       autoHideDuration={3000}
-      open={open}
-      onClose={closeSnackbar}
+      open={detectedCycle}
+      onClose={closeCycleSnackbar}
     >
       <Alert severity="info" sx={{ backgroundColor: 'grey.800' }}>
         A cycle has been detected.
@@ -26,3 +21,5 @@ export const CycleAlert: FC<CycleAlertProps> = ({ hasCycle }) => {
     </Snackbar>
   );
 };
+
+export default CycleAlert;
