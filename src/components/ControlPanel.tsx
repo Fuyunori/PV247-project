@@ -54,10 +54,10 @@ const ControlPanel: FC<Props> = ({
 
       <ButtonGroup orientation={btnGroupOrientation} variant="contained" aria-label="outlined primary button group">
         <Button onClick={onReset} aria-label="reset">
-          <RefreshIcon />
+          <RefreshIcon sx={{ fontSize: 22 }} />
         </Button>
         <Button onClick={onStepBackward} aria-label="step backward">
-          <RiArrowGoBackFill />
+          <RiArrowGoBackFill size={17} />
         </Button>
         <Button
           onClick={onToggleSimulation}
@@ -67,7 +67,7 @@ const ControlPanel: FC<Props> = ({
           {running ? 'Pause' : 'Start'}
         </Button>
         <Button onClick={onStepForward} aria-label="step forward">
-          <RiArrowGoForwardFill />
+          <RiArrowGoForwardFill size={17} />
         </Button>
         <Button
           onClick={onSetCurrentGenerationAsInitial}
