@@ -11,12 +11,11 @@ import Social from '../components/Social';
 import useLoggedInUser from '../hooks/useLoggedInUser';
 import { useParams } from 'react-router-dom';
 import useConfigurationById from '../api/useConfigurationById';
-import { CircularProgress, Container } from '@mui/material';
-import { indexOfCycleStart } from '../utils/indexOfCycleStart';
+import { Alert, CircularProgress, Container, Snackbar } from '@mui/material';
 import { useScreenWidth } from '../utils/useScreenWidth';
-import { CycleAlert } from '../components/CycleAlert';
+import generationsAreEqual from '../utils/generationsAreEqual';
 
-const INITIAL_SIMULATION_DELAY = 100;
+const INITIAL_SIMULATION_TIMEOUT = 100;
 
 const getCurrentGenerationCoordinateSet = (generations: Generation[]) => {
   return new CoordinateSet(generations.slice(-1)[0]);
@@ -28,6 +27,7 @@ const Board: FC = () => {
 
   const user = useLoggedInUser();
 
+  // TODO
   const { configId = '0' } = useParams();
 
   const [configuration, configurationLoading] = useConfigurationById(configId);
@@ -54,14 +54,6 @@ const Board: FC = () => {
       ...generations,
       [...getNextGeneration(getCurrentGenerationCoordinateSet(generations))],
     ]);
-
-    if (!hasCycle) {
-      const index = indexOfCycleStart(generations);
-
-      if (index != null && !hasCycle) {
-        setHasCycle(true);
-      }
-    }
   };
 
   const stepBackward = (): void => {
@@ -77,15 +69,13 @@ const Board: FC = () => {
 
   const setCurrentGenerationAsInitial = (): void => {
     setGenerations([generations.slice(-1)[0]]);
-    setHasCycle(false);
   };
 
   const clearBoard = (): void => {
     setGenerations([[]]);
-    setHasCycle(false);
   };
 
-  const { running, start, stop, delay, setDelay } = useInterval(stepForward, INITIAL_SIMULATION_DELAY);
+  const { running, start, stop, timeout, setTimeout } = useInterval(stepForward, INITIAL_SIMULATION_TIMEOUT);
 
   const toggleSimulation = (): void => {
     if (running) {
@@ -93,21 +83,12 @@ const Board: FC = () => {
     } else {
       start();
     }
-
-    if (!hasCycle) {
-      const index = indexOfCycleStart(generations);
-
-      if (index != null && !hasCycle) {
-        setHasCycle(true);
-      }
-    }
   };
 
-  const changeSpeed = (_: Event, value: number | number[]): void => setDelay(1000 - (value as number));
+  const changeSpeed = (_: Event, value: number | number[]): void => setTimeout(1000 - (value as number));
 
   const [boardWidth, setBoardWidth] = useState(configuration.width);
   const [boardHeight, setBoardHeight] = useState(configuration.height);
-  const [hasCycle, setHasCycle] = useState(false);
 
   const share = async () => {
     const link = await getShareableLink(generations[0], boardWidth, boardHeight, user);
@@ -124,6 +105,19 @@ const Board: FC = () => {
     saveGeneration(generations[0], configName);
   };
 
+  useEffect(() => {
+    const lastGeneration = generations.slice(-1)[0];
+    const prevGenerations = generations.slice(0, -1);
+    const detectedCycle = prevGenerations.some((gen) => generationsAreEqual(gen, lastGeneration));
+    setDetectedCycle(detectedCycle);
+  }, [generations]);
+
+  const [detectedCycle, setDetectedCycle] = useState(false);
+
+  const closeCycleSnackbar = () => {
+    setDetectedCycle(false);
+  };
+
   if (configurationLoading) {
     return (
       <Container
@@ -137,7 +131,17 @@ const Board: FC = () => {
     <Container sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       <Social onShare={share} onSaveCurrentGeneration={saveCurrentGeneration} onSaveSimulation={saveSimulation} />
 
-      {hasCycle && <CycleAlert hasCycle={hasCycle} />}
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        sx={{ marginTop: 7 }}
+        autoHideDuration={3000}
+        open={detectedCycle}
+        onClose={closeCycleSnackbar}
+      >
+        <Alert severity="info" sx={{ backgroundColor: 'grey.800' }}>
+          A cycle has been detected.
+        </Alert>
+      </Snackbar>
 
       <Canvas
         generation={generations[generations.length - 1]}
@@ -161,7 +165,7 @@ const Board: FC = () => {
         onWidthChange={setBoardWidth}
         onChangeSpeed={changeSpeed}
         running={running}
-        delay={delay}
+        timeout={timeout}
       />
     </Container>
   );

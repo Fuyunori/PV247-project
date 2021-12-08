@@ -21,7 +21,7 @@ type Props = {
   onHeightChange: (height: number) => void;
   onChangeSpeed: (_: Event, value: number | number[]) => void;
   running: boolean;
-  delay: number;
+  timeout: number;
 };
 
 const ControlPanel: FC<Props> = ({
@@ -37,11 +37,13 @@ const ControlPanel: FC<Props> = ({
   onHeightChange,
   onChangeSpeed,
   running,
-  delay,
+  timeout,
 }) => {
   const handleWidthChange = (event: ChangeEvent<HTMLTextAreaElement>) => onWidthChange(+event.target.value);
 
   const handleHeightChange = (event: ChangeEvent<HTMLTextAreaElement>) => onHeightChange(+event.target.value);
+
+  const btnGroupOrientation = useMediaQuery('(min-width:768px)') ? 'horizontal' : 'vertical';
 
   return (
     <Stack direction={{ xs: 'column', sm: 'column', md: 'row' }} alignItems="center" gap={2} sx={{ margin: '30px' }}>
@@ -50,11 +52,7 @@ const ControlPanel: FC<Props> = ({
         <TextField label="height:" type="number" onChange={handleHeightChange} value={boardHeight} />
       </Stack>
 
-      <ButtonGroup
-        orientation={`${useMediaQuery('(min-width:768px)') ? `horizontal` : `vertical`}`}
-        variant="contained"
-        aria-label="outlined primary button group"
-      >
+      <ButtonGroup orientation={btnGroupOrientation} variant="contained" aria-label="outlined primary button group">
         <Button onClick={onReset} aria-label="reset">
           <RefreshIcon />
         </Button>
@@ -85,7 +83,7 @@ const ControlPanel: FC<Props> = ({
 
       <Stack direction="column" alignItems="center" width={200}>
         <SpeedIcon />
-        <Slider min={800} max={1000} value={1000 - delay} aria-label="simulation speed" onChange={onChangeSpeed} />
+        <Slider min={800} max={1000} value={1000 - timeout} aria-label="simulation speed" onChange={onChangeSpeed} />
       </Stack>
     </Stack>
   );

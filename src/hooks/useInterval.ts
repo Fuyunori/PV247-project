@@ -2,25 +2,25 @@ import { useState } from 'react';
 
 const useInterval = (
   callback: () => void,
-  initDelay: number,
+  initialTimeout: number,
 ): {
-  delay: number;
+  timeout: number;
   running: boolean;
   start: () => void;
   stop: () => void;
-  setDelay: (delay: number) => void;
+  setTimeout: (timeout: number) => void;
 } => {
-  const [delay, setDelay] = useState(initDelay);
+  const [timeout, setTimeout] = useState(initialTimeout);
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
 
   return {
-    delay,
+    timeout,
     running: intervalId != null,
     start: () => {
       if (intervalId) {
         clearInterval(intervalId);
       }
-      setIntervalId(setInterval(callback, delay));
+      setIntervalId(setInterval(callback, timeout));
     },
     stop: () => {
       if (intervalId) {
@@ -28,11 +28,11 @@ const useInterval = (
         setIntervalId(null);
       }
     },
-    setDelay: (delay) => {
-      setDelay(delay);
+    setTimeout: (timeout) => {
+      setTimeout(timeout);
       if (intervalId) {
         clearInterval(intervalId);
-        setIntervalId(setInterval(callback, delay));
+        setIntervalId(setInterval(callback, timeout));
       }
     },
   };
