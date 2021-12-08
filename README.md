@@ -3,6 +3,8 @@
 [![codecov](https://codecov.io/gh/petr7555/pv247-game-of-life/branch/main/graph/badge.svg?token=CA27W2XYL6)](https://codecov.io/gh/petr7555/pv247-game-of-life)
 
 # PV247 Project - Game of Life
+Running on https://pv247-game-of-life.web.app/.
+
 ## Used technologies
 - React
 - Firebase _(Firestore, Firebase Auth)_
