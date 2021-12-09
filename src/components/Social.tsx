@@ -106,7 +106,7 @@ const Social: FC<Props> = ({ onShare, onSaveCurrentGeneration, onSaveSimulation 
           </Dialog>
         )}
       />
-      <Stack direction={{ xs: 'column', sm: 'column', md: 'row' }} alignItems="center" gap={2} sx={{ marginY: 3 }}>
+      <Stack direction="row" alignItems="center" gap={2} sx={{ marginY: 3 }}>
         <Button
           variant="contained"
           endIcon={generatingShareLink ? <CircularProgress sx={{ color: 'grey.500' }} size={17} /> : <ShareIcon />}

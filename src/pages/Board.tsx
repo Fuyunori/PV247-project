@@ -11,7 +11,7 @@ import Social from '../components/Social';
 import useLoggedInUser from '../hooks/useLoggedInUser';
 import { useParams } from 'react-router-dom';
 import useConfigurationById from '../api/useConfigurationById';
-import { Alert, CircularProgress, Container, Snackbar } from '@mui/material';
+import { CircularProgress, Container } from '@mui/material';
 import { useScreenWidth } from '../utils/useScreenWidth';
 import generationsAreEqual from '../utils/generationsAreEqual';
 import CycleAlert from '../components/CycleAlert';
@@ -37,9 +37,8 @@ const Board: FC = () => {
 
   useEffect(() => {
     setGenerations([configuration.initialGeneration]);
-    setBoardWidth(configuration.width);
-    setBoardHeight(configuration.height);
-  }, [configurationLoading]);
+    setBoardSize(configuration.boardSize);
+  }, [configuration.boardSize, configuration.initialGeneration, configurationLoading]);
 
   const toggleCell = (coordinate: Coordinate) => {
     const cur = getCurrentGenerationCoordinateSet(generations);
@@ -88,11 +87,10 @@ const Board: FC = () => {
 
   const changeSpeed = (_: Event, value: number | number[]): void => setTimeout(1000 - (value as number));
 
-  const [boardWidth, setBoardWidth] = useState(configuration.width);
-  const [boardHeight, setBoardHeight] = useState(configuration.height);
+  const [boardSize, setBoardSize] = useState(configuration.boardSize);
 
   const share = async () => {
-    const link = await getShareableLink(generations[0], boardWidth, boardHeight, user);
+    const link = await getShareableLink(generations[0], boardSize, user);
     await navigator.clipboard.writeText(link);
   };
 
@@ -137,27 +135,24 @@ const Board: FC = () => {
 
       <Canvas
         generation={generations[generations.length - 1]}
-        configWidth={boardWidth}
-        configHeight={boardHeight}
+        boardSize={boardSize}
         canvasWidth={Math.min(800, screenWidth)}
         showGrid
         onCellClick={toggleCell}
       />
 
       <ControlPanel
-        boardWidth={boardWidth}
-        boardHeight={boardHeight}
         onReset={resetGenerations}
         onSetCurrentGenerationAsInitial={setCurrentGenerationAsInitial}
         onClear={clearBoard}
         onStepBackward={stepBackward}
         onToggleSimulation={toggleSimulation}
         onStepForward={stepForward}
-        onHeightChange={setBoardHeight}
-        onWidthChange={setBoardWidth}
+        onBoardSizeChange={setBoardSize}
         onChangeSpeed={changeSpeed}
         running={running}
         timeout={timeout}
+        boardSize={boardSize}
       />
     </Container>
   );

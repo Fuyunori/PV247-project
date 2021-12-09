@@ -1,4 +1,4 @@
-import { FC, MouseEventHandler, useEffect, useRef } from 'react';
+import { FC, MouseEventHandler, useEffect, useMemo, useRef } from 'react';
 import { Coordinate } from '../utils/getNextGeneration';
 import { useTheme } from '@mui/material';
 import Generation from '../models/Generation';
@@ -7,25 +7,21 @@ const GRID_COLOR = '#999999';
 const GRID_THICKNESS = 1;
 
 export type Props = {
-  readonly generation: Generation;
-  readonly configWidth: number;
-  readonly configHeight: number;
-  readonly canvasWidth: number;
-  readonly canvasHeight?: number;
-  readonly showGrid?: boolean;
-  readonly onCellClick?: (coord: Coordinate) => void;
+  generation: Generation;
+  boardSize: number;
+  canvasWidth: number;
+  givenCanvasHeight?: number;
+  showGrid?: boolean;
+  onCellClick?: (coord: Coordinate) => void;
 };
 
 const Canvas: FC<Props> = (props) => {
-  const {
-    generation,
-    configWidth,
-    configHeight,
-    canvasWidth,
-    canvasHeight = (canvasWidth * configHeight) / configWidth,
-    showGrid = false,
-    onCellClick,
-  } = props;
+  const { generation, boardSize, canvasWidth, givenCanvasHeight, showGrid = false, onCellClick } = props;
+  console.log('boardSize', boardSize);
+  const configHeight = useMemo(() => Math.pow(boardSize, 1.1), [boardSize]);
+  const configWidth = useMemo(() => 2 * configHeight, [configHeight]);
+
+  const canvasHeight = givenCanvasHeight ?? (canvasWidth * configHeight) / configWidth;
 
   const theme = useTheme();
 
@@ -69,7 +65,18 @@ const Canvas: FC<Props> = (props) => {
     for (const [x, y] of generation) {
       ctx.fillRect(x * scale + transX, y * scale + transY, scale, scale);
     }
-  }, [generation, canvasWidth, canvasHeight, showGrid, canvasRef.current]);
+  }, [
+    generation,
+    canvasWidth,
+    canvasHeight,
+    showGrid,
+    theme.palette.primary.main,
+    configWidth,
+    scale,
+    transX,
+    transY,
+    configHeight,
+  ]);
 
   const handleClick: MouseEventHandler = ({ nativeEvent }) => {
     const cellX = Math.floor((nativeEvent.offsetX - transX) / scale);

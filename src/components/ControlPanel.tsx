@@ -1,5 +1,5 @@
-import { ChangeEvent, FC } from 'react';
-import { Button, ButtonGroup, Slider, Stack, TextField, useMediaQuery } from '@mui/material';
+import { ChangeEvent, FC, useState } from 'react';
+import { Button, ButtonGroup, Slider, Stack, useMediaQuery } from '@mui/material';
 import { RiArrowGoBackFill, RiArrowGoForwardFill } from 'react-icons/ri';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -7,49 +7,49 @@ import SpeedIcon from '@mui/icons-material/Speed';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import Grid4x4Icon from '@mui/icons-material/Grid4x4';
 
 type Props = {
-  boardWidth: number;
-  boardHeight: number;
   onReset: () => void;
   onSetCurrentGenerationAsInitial: () => void;
   onClear: () => void;
   onStepForward: () => void;
   onStepBackward: () => void;
   onToggleSimulation: () => void;
-  onWidthChange: (width: number) => void;
-  onHeightChange: (height: number) => void;
+  onBoardSizeChange: (boardSize: number) => void;
   onChangeSpeed: (_: Event, value: number | number[]) => void;
   running: boolean;
   timeout: number;
+  boardSize: number;
 };
 
 const ControlPanel: FC<Props> = ({
-  boardWidth,
-  boardHeight,
   onReset,
   onSetCurrentGenerationAsInitial,
   onClear,
   onStepForward,
   onStepBackward,
   onToggleSimulation,
-  onWidthChange,
-  onHeightChange,
+  onBoardSizeChange,
   onChangeSpeed,
   running,
   timeout,
+  boardSize,
 }) => {
-  const handleWidthChange = (event: ChangeEvent<HTMLTextAreaElement>) => onWidthChange(+event.target.value);
-
-  const handleHeightChange = (event: ChangeEvent<HTMLTextAreaElement>) => onHeightChange(+event.target.value);
+  const changeBoardSize = (_: Event, boardSize: number | number[]): void => {
+    if (Array.isArray(boardSize)) {
+      return;
+    }
+    onBoardSizeChange(boardSize);
+  };
 
   const btnGroupOrientation = useMediaQuery('(min-width:768px)') ? 'horizontal' : 'vertical';
 
   return (
     <Stack direction={{ xs: 'column', sm: 'column', md: 'row' }} alignItems="center" gap={2} sx={{ margin: '30px' }}>
-      <Stack direction="column" alignItems="center" width={200} gap={1.5}>
-        <TextField label="width:" type="number" onChange={handleWidthChange} value={boardWidth} />
-        <TextField label="height:" type="number" onChange={handleHeightChange} value={boardHeight} />
+      <Stack direction="column" alignItems="center" width={200}>
+        <Grid4x4Icon />
+        <Slider min={3} max={80} value={boardSize} aria-label="board size" onChange={changeBoardSize} />
       </Stack>
 
       <ButtonGroup orientation={btnGroupOrientation} variant="contained" aria-label="outlined primary button group">

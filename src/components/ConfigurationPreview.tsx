@@ -5,7 +5,7 @@ import Canvas from './Canvas';
 import { ParsedConfiguration } from '../models/Configuration';
 
 type Props = {
-  readonly configuration: ParsedConfiguration;
+  configuration: ParsedConfiguration;
 };
 
 const ConfigurationPreview: FC<Props> = ({ configuration }) => {
@@ -14,10 +14,9 @@ const ConfigurationPreview: FC<Props> = ({ configuration }) => {
       <CardActionArea component={Link} to={`/configurations/${configuration.id}`}>
         <Canvas
           generation={configuration.initialGeneration}
-          configWidth={configuration.width}
-          configHeight={configuration.height}
+          boardSize={configuration.boardSize}
           canvasWidth={200}
-          canvasHeight={200}
+          givenCanvasHeight={200}
         />
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <CardContent sx={{ flex: '1 0 auto' }}>

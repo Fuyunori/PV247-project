@@ -5,14 +5,13 @@ import { configurationsCollection } from '../utils/firebase';
 import { ConfigurationInput } from '../models/Configuration';
 import getUniqueName from '../utils/getUniqueName';
 
-const getShareableLink = async (generation: Generation, width: number, height: number, user: User | undefined) => {
+const getShareableLink = async (generation: Generation, boardSize: number, user: User | undefined) => {
   const authorName = user?.email?.split('@')[0] || 'Anonymous';
   const newConfig: ConfigurationInput = {
     name: getUniqueName(),
     authorName,
     createdAt: new Date(),
-    height,
-    width,
+    boardSize,
     initialGeneration: JSON.stringify(generation),
   };
   const doc = await addDoc(configurationsCollection, newConfig);

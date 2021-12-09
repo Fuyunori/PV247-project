@@ -4,8 +4,7 @@ import { useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 import { FirestoreError } from 'firebase/firestore';
 
 export const DEFAULT_CONFIGURATION: Configuration = {
-  width: 80,
-  height: 50,
+  boardSize: 20,
   initialGeneration: [
     [0, 0],
     [5, 5],

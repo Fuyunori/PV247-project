@@ -1,7 +1,7 @@
 export type User = {
-  readonly id: string;
-  readonly email: string;
-  readonly name: string;
+  id: string;
+  email: string;
+  name: string;
 };
 
 export default User;
