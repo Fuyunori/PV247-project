@@ -64,7 +64,6 @@ const Board: FC = () => {
 
   const resetGenerations = (): void => {
     setGenerations([generations[0]]);
-    stop();
   };
 
   const setCurrentGenerationAsInitial = (): void => {
