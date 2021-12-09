@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { FC } from 'react';
 import { Button, ButtonGroup, Slider, Stack, useMediaQuery } from '@mui/material';
 import { RiArrowGoBackFill, RiArrowGoForwardFill } from 'react-icons/ri';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -19,7 +19,7 @@ type Props = {
   onBoardSizeChange: (boardSize: number) => void;
   onChangeSpeed: (_: Event, value: number | number[]) => void;
   running: boolean;
-  timeout: number;
+  delay: number;
   boardSize: number;
 };
 
@@ -33,7 +33,7 @@ const ControlPanel: FC<Props> = ({
   onBoardSizeChange,
   onChangeSpeed,
   running,
-  timeout,
+  delay,
   boardSize,
 }) => {
   const changeBoardSize = (_: Event, boardSize: number | number[]): void => {
@@ -83,7 +83,7 @@ const ControlPanel: FC<Props> = ({
 
       <Stack direction="column" alignItems="center" width={200}>
         <SpeedIcon />
-        <Slider min={800} max={1000} value={1000 - timeout} aria-label="simulation speed" onChange={onChangeSpeed} />
+        <Slider min={800} max={1000} value={1000 - delay} aria-label="simulation speed" onChange={onChangeSpeed} />
       </Stack>
     </Stack>
   );

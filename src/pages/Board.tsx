@@ -16,7 +16,7 @@ import { useScreenWidth } from '../utils/useScreenWidth';
 import generationsAreEqual from '../utils/generationsAreEqual';
 import CycleAlert from '../components/CycleAlert';
 
-const INITIAL_SIMULATION_TIMEOUT = 100;
+const INITIAL_SIMULATION_DELAY = 100;
 
 const getCurrentGenerationCoordinateSet = (generations: Generation[]) => {
   return new CoordinateSet(generations.slice(-1)[0]);
@@ -75,7 +75,7 @@ const Board: FC = () => {
     setGenerations([[]]);
   };
 
-  const { running, start, stop, timeout, setTimeout } = useInterval(stepForward, INITIAL_SIMULATION_TIMEOUT);
+  const { running, start, stop, delay, setDelay } = useInterval(stepForward, INITIAL_SIMULATION_DELAY);
 
   const toggleSimulation = (): void => {
     if (running) {
@@ -85,7 +85,7 @@ const Board: FC = () => {
     }
   };
 
-  const changeSpeed = (_: Event, value: number | number[]): void => setTimeout(1000 - (value as number));
+  const changeSpeed = (_: Event, value: number | number[]): void => setDelay(1000 - (value as number));
 
   const [boardSize, setBoardSize] = useState(configuration.boardSize);
 
@@ -151,7 +151,7 @@ const Board: FC = () => {
         onBoardSizeChange={setBoardSize}
         onChangeSpeed={changeSpeed}
         running={running}
-        timeout={timeout}
+        delay={delay}
         boardSize={boardSize}
       />
     </Container>
