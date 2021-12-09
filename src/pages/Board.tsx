@@ -38,7 +38,8 @@ const Board: FC = () => {
   useEffect(() => {
     setGenerations([configuration.initialGeneration]);
     setBoardSize(configuration.boardSize);
-  }, [configuration.boardSize, configuration.initialGeneration, configurationLoading]);
+    // eslint-disable-next-line
+  }, [configurationLoading]);
 
   const toggleCell = (coordinate: Coordinate) => {
     const cur = getCurrentGenerationCoordinateSet(generations);
