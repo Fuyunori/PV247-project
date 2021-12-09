@@ -10,9 +10,6 @@ const Layout: FC = ({ children }) => {
         maxWidth="lg"
         component="main"
         sx={{
-          alignItems: 'center',
-          height: '100vh',
-          paddingTop: '100px',
           pt: 8,
           gap: 2,
         }}

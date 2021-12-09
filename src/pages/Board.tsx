@@ -12,7 +12,7 @@ import useLoggedInUser from '../hooks/useLoggedInUser';
 import { useParams } from 'react-router-dom';
 import useConfigurationById from '../api/useConfigurationById';
 import { CircularProgress, Container } from '@mui/material';
-import { useScreenWidth } from '../utils/useScreenWidth';
+import useWindowWidth from '../utils/useWindowWidth';
 import generationsAreEqual from '../utils/generationsAreEqual';
 import CycleAlert from '../components/CycleAlert';
 
@@ -24,11 +24,11 @@ const getCurrentGenerationCoordinateSet = (generations: Generation[]) => {
 
 const Board: FC = () => {
   usePageTitle('Play');
-  const screenWidth = useScreenWidth();
+  const windowWidth = useWindowWidth();
 
   const user = useLoggedInUser();
 
-  // TODO
+  // TODO avoid fetching when url does not contain configId
   const { configId = '0' } = useParams();
 
   const [configuration, configurationLoading] = useConfigurationById(configId);
@@ -135,7 +135,7 @@ const Board: FC = () => {
       <Canvas
         generation={generations[generations.length - 1]}
         boardSize={boardSize}
-        canvasWidth={Math.min(800, screenWidth)}
+        canvasWidth={Math.min(1200, windowWidth)}
         showGrid
         onCellClick={toggleCell}
       />
