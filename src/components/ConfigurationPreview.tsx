@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Box, Card, CardActionArea, CardContent, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Canvas from './Canvas';
 import { ParsedConfiguration } from '../models/Configuration';
 
@@ -9,17 +9,21 @@ type Props = {
 };
 
 const ConfigurationPreview: FC<Props> = ({ configuration }) => {
+  const navigate = useNavigate();
+
+  const openConfiguration = () => {
+    navigate(`/configurations/${configuration.id}`);
+  };
+
   return (
-    <Card sx={{ display: 'flex' }}>
-      <CardActionArea component={Link} to={`/configurations/${configuration.id}`}>
-        <Canvas
-          generation={configuration.initialGeneration}
-          boardSize={configuration.boardSize}
-          canvasWidth={200}
-          givenCanvasHeight={200}
-        />
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <CardContent sx={{ flex: '1 0 auto' }}>
+    <Card>
+      <CardActionArea
+        onClick={openConfiguration}
+        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 2 }}
+      >
+        <Canvas generation={configuration.initialGeneration} boardSize={configuration.boardSize} canvasWidth={250} />
+        <Box>
+          <CardContent>
             <Typography component="div" variant="h5">
               {configuration.name}
             </Typography>

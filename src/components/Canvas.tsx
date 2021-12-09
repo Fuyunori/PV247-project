@@ -10,18 +10,17 @@ export type Props = {
   generation: Generation;
   boardSize: number;
   canvasWidth: number;
-  givenCanvasHeight?: number;
   showGrid?: boolean;
   onCellClick?: (coord: Coordinate) => void;
 };
 
 const Canvas: FC<Props> = (props) => {
-  const { generation, boardSize, canvasWidth, givenCanvasHeight, showGrid = false, onCellClick } = props;
+  const { generation, boardSize, canvasWidth, showGrid = false, onCellClick } = props;
 
   const configHeight = useMemo(() => Math.pow(boardSize, 1.1), [boardSize]);
   const configWidth = useMemo(() => 2 * configHeight, [configHeight]);
 
-  const canvasHeight = givenCanvasHeight ?? (canvasWidth * configHeight) / configWidth;
+  const canvasHeight = (canvasWidth * configHeight) / configWidth;
 
   const theme = useTheme();
 
