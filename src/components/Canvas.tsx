@@ -17,7 +17,7 @@ export type Props = {
 
 const Canvas: FC<Props> = (props) => {
   const { generation, boardSize, canvasWidth, givenCanvasHeight, showGrid = false, onCellClick } = props;
-  console.log('boardSize', boardSize);
+
   const configHeight = useMemo(() => Math.pow(boardSize, 1.1), [boardSize]);
   const configWidth = useMemo(() => 2 * configHeight, [configHeight]);
 
