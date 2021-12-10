@@ -1,4 +1,4 @@
-name: Lint, test, build
+name: Lint and test
 
 on:
   push:
@@ -11,7 +11,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
+  lint_and_test:
+    name: Lint and test
     runs-on: ubuntu-latest
 
     strategy:
