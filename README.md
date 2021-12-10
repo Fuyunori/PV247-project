@@ -1,3 +1,5 @@
+trigger pipeline
+
 [![Firebase Deployment](https://github.com/petr7555/pv247-game-of-life/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/petr7555/pv247-game-of-life/actions/workflows/firebase-hosting-merge.yml)
 [![Lint, test, build](https://github.com/petr7555/pv247-game-of-life/actions/workflows/lint_and_test.yml/badge.svg)](https://github.com/petr7555/pv247-game-of-life/actions/workflows/lint_and_test.yml)
 [![codecov](https://codecov.io/gh/petr7555/pv247-game-of-life/branch/main/graph/badge.svg?token=CA27W2XYL6)](https://codecov.io/gh/petr7555/pv247-game-of-life)
