@@ -114,14 +114,12 @@ const Board: FC = () => {
     await navigator.clipboard.writeText(link);
   };
 
-  // TODO
   const saveCurrentGeneration = async (configName: string) => {
-    saveGeneration(generations.slice(-1)[0], configName);
+    saveGeneration(generations.slice(-1)[0], configName, boardWidth, boardHeight, user);
   };
 
-  // TODO
   const saveSimulation = async (configName: string) => {
-    saveGeneration(generations[0], configName);
+    saveGeneration(generations[0], configName, boardWidth, boardHeight, user);
   };
 
   if (configurationLoading) {
